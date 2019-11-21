@@ -8,13 +8,13 @@
 ## Section 3: Research questions and usage scenarios
 
 
-Do concentration levels of PM10 and PM25 follow a similar trend?
-Do concentration levels of PM10 and PM25 exhibit seasonality
-Is there a particular season of the year which is characterized by the highest pollution levels?
-What is the range of average PM10 and PM25 concentrations in a given year?
-What is the rate of change from season to season for the time period?
-What locations have the highest concentration of pollutants? 
-Which location has the highest rate of increase for pollutant concentration.
+- Do concentration levels of PM10 and PM25 follow a similar trend?
+- Do concentration levels of PM10 and PM25 exhibit seasonality
+- Is there a particular season of the year which is characterized by the highest pollution levels?
+- What is the range of average PM10 and PM25 concentrations in a given year?
+- What is the rate of change from season to season for the time period?
+- What locations have the highest concentration of pollutants? 
+- Which location has the highest rate of increase for pollutant concentration.
 
 
 

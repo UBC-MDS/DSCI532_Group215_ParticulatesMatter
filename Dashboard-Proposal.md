@@ -20,12 +20,15 @@ Our app will visualize data sourced from the BC Ministry of Environment and Clim
 ## Section 3: Research questions and usage scenarios
 
 
-- Do concentration levels of PM10 and PM25 follow a similar trend?
-- Do concentration levels of PM10 and PM25 exhibit seasonality, and are there any consistent patterns?
+
+- Do concentration levels of PM10 and PM2.5 follow a similar trend?
+- Do concentration levels of PM10 and PM2.5 exhibit seasonality
 - Is there a particular season of the year which is characterized by the highest pollution levels?
-- What is the range of average PM10 and PM25 concentrations in a given year?
-- What locations, or clusters of locations, have the highest concentration of pollutants? 
-- Which location has the highest rate of increase in pollutant concentration?
+- What is the range of average PM10 and PM2.5 concentrations in a given year?
+- What is the rate of change from season to season for the time period?
+- What locations have the highest concentration of pollutants? 
+- Which location has the highest rate of increase for pollutant concentration.
+
 
   Dave, BC’s  Commissioner for Sustainable Development and the Environment, is in charge of assessing the state of air quality in BC. Recently, he has been informed by the Ministry of Health that there have been increasing cases of respiratory health problems along coastal locations in Vancouver. They suspect air quality to be a potential factor in this rise, so they ask Dave, the Commissioner for Sustainable Development and the Environment, to investigate and compile a report. To better understand the air quality situation, Dave wants to track how pollutant concentration has changed over time, with a special focus on whether the rate of increase poses a signficant concern. In particular, he is interested in which locations exhibit the most concerning levels of pollution so that he can plan and recommend future interventions to government-level decision makers.
 

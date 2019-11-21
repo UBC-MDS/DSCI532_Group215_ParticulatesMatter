@@ -5,6 +5,14 @@
 
 ## Section 2 Description of the data
 
+Our app will visualize data sourced from the BC Ministry of Environment and Climate Change. The ministry publishes quality-assured hourly data on its [website](https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409) from air quality monitoring stations across BC. The following columns in the dataset are pertinent to our app:
+- Date and time of each observation is found in the `DATA_PST` variable in Pacific Standard Time;
+- The location of each reading is found in the `STATION_NAME` variable, which is paired with a unique `EMS_ID`;
+- The name of the specific pollutant measured is stored in the `PARAMETER` field; 
+- The name of the instrument used to record pollutant concentrations is stored in the `INSTRUMENT` variable; and
+- The concentrations of PM2.5 and PM10 are recorded in the `RAW_VALUE` amd `ROUNDED_VALUE` fields. The units corresponding to these concentrations are micrograms per cubic metre (ug/m3) as shown in the `UNITS` variable.
+
+
 ## Section 3: Research questions and usage scenarios
 
 

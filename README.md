@@ -8,4 +8,7 @@ Dataset: Time series of particulate matter concentrations across BC
 
 Screenshot of dashboard design sketch:
 
-![img](img/Draft_dashboard_design_sketch.png)
+
+![img](img/2nd_draft_design_sketch.png)
+
+

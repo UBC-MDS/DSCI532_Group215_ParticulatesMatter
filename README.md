@@ -1,4 +1,4 @@
-# DSCI_532_L02_ParticulatesMatter
+# DSCI 532: Group 215 - ParticulatesMatter
 
 Members: Tejas Phaterpekar, Karlos Muradyan, Jarome Leslie
 
@@ -9,6 +9,6 @@ Dataset: Time series of particulate matter concentrations across BC
 Screenshot of dashboard design sketch:
 
 
-![img](img/2nd_draft_design_sketch.png)
+![img](img/revised_dashboard_design_sketch.png)
 
 

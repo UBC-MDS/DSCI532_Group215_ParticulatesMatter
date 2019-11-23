@@ -19,6 +19,7 @@ Our app will visualize data sourced from the BC Ministry of Environment and Clim
 ## Section 3: Research questions and usage scenarios
 
 
+
 - Do concentration levels of PM10 and PM2.5 follow a similar trend?
 - Do concentration levels of PM10 and PM2.5 exhibit seasonality
 - Is there a particular season of the year which is characterized by the highest pollution levels?
@@ -28,8 +29,7 @@ Our app will visualize data sourced from the BC Ministry of Environment and Clim
 - Which location has the highest rate of increase for pollutant concentration.
 
 
+  Dave, BC’s  Commissioner for Sustainable Development and the Environment, is in charge of assessing the state of air quality in BC. Recently, he has been informed by the Ministry of Health that there have been increasing cases of respiratory health problems along coastal locations in Vancouver. They suspect air quality to be a potential factor in this rise, so they ask Dave, the Commissioner for Sustainable Development and the Environment, to investigate and compile a report. To better understand the air quality situation, Dave wants to track how pollutant concentration has changed over time, with a special focus on whether the rate of increase poses a signficant concern. In particular, he is interested in which locations exhibit the most concerning levels of pollution so that he can plan and recommend future interventions to government-level decision makers.
 
-The main point of the dashboard is to inform clients on how pollution has changed over time as well as where the pollution is most intense. 
-
-Dave, BC’s  Commissioner for Sustainable Development and the Environment, is hoping to better understand the air quality situation in areas of Greater Vancouver, to track whether air quality is under control. He is particularly interested in what locations are most in need for interventions to lower pollutant concentration in the air. Our app, “Pollutants Matter BC”, is focused on delivering Dave methods of visualization to help inform him. For example, he may be specifically interested in the air pollution of coastal areas. He may hypothesize that coastal areas have seen a rise in air pollution in the past decade. Using the apps features to selectively toggle data for locations of interest, Dave will easily be able to track how PM10 and PM2.5 have changed over the years. Furthermore, he will be able to pinpoint which coastal areas are in the worst shape so that urgent action can be taken to reverse any worrying trends. 
+  Our app, “Pollutants Matter BC”, is centered around providing Dave with informative methods of visualization that will help him extract important trends and patterns with regards to pollutant concentration in the Greater Vancouver area. Since he was informed that health problems have become an issue in coastal locations, he may hypothesize that coastal areas have seen a rise in air pollution in the past decade. Interactive features like a toggle for different locations, as well the option to choose different time ranges, will give Dave flexibility in how he chooses explore measures of air pollution, like PM10 and PM2.5. After viewing the data from different perspectives, Dave discovers that levels of PM2.5 in coastal locations are rising by an average of 4% each year. He recommends immediate intervention in his report to the government.
 

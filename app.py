@@ -18,6 +18,7 @@ import altair as alt
 ###########################################
 
 test_df = pd.read_csv('data/pm_kits.csv')
+pollution_data = pd.read_csv('data/processed_data.csv')
 
 
 
@@ -225,6 +226,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label': 'PM2.5', 'value': 'PM2.5'},
                         {'label': 'PM10', 'value': 'PM10'}
                     ],
+                    
                     value='MTL'
                 ),
 
@@ -232,10 +234,9 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 
                 dcc.Dropdown(
                     options=[
-                        {'label': 'Vancouver', 'value': 'Vancouver'},
-                        {'label': 'Surrey', 'value': 'Surrey'},
-                        {'label': 'Burnaby', 'value': 'Burnaby'}
+                        {'label':k , 'value': k } for k in pollution_data['STATION_NAME'].unique()
                     ],
+                    multi = True,
                     value='MTL'
                 )    
                 

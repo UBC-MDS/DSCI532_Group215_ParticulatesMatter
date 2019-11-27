@@ -9,6 +9,7 @@ import numpy as np
 PM10_data = pd.read_csv('ftp://ftp.env.gov.bc.ca/pub/outgoing/AIR/AnnualSummary/2000-2016/pm10.csv', 
                         index_col = 'DATE_PST', 
                         parse_dates = True)
+
 PM25_data = pd.read_csv('ftp://ftp.env.gov.bc.ca/pub/outgoing/AIR/AnnualSummary/2000-2016/pm25.csv', 
                         index_col = 'DATE_PST', 
                         parse_dates = True)
@@ -46,8 +47,14 @@ combined_data = pd.concat([PM10_data, PM25_data]).query('STATION_NAME in @shared
 combined_data.to_csv("data/processed_data.csv")
 
 def get_summary(df_combined):
+    """
+    Takes in combined DataFrame object, and calculates summary statistics for every location and pollutant type
 
-    summary_stats = df_combined.groupby("STATION_NAME").agg({"RAW_VALUE": ["max", "min", "mean", "median", "std", "var"]})
+    Arguments:
+    df_combined -- (DataFrame) Input dataset
+    """
+
+    summary_stats = df_combined.groupby(["STATION_NAME", "PARAMETER"]).agg({"RAW_VALUE": ["max", "min", "mean", "median", "std", "var"]})
     return summary_stats
 
 get_summary(combined_data).to_csv("data/location_summary.csv")

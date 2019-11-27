@@ -18,7 +18,7 @@ shared_columns = set(PM10_data["STATION_NAME"].unique()).intersection(set(PM25_d
 
 def process_dataset(df):
     """
-    Takes in a dataframe and processes it to the correct format
+    Takes in a dataframe and processes it, and then returns a processed Pandas DataFrame
 
     Arguments:
     df -- (DataFrame) the dataframe that will be processed
@@ -44,3 +44,10 @@ combined_data = pd.concat([PM10_data, PM25_data]).query('STATION_NAME in @shared
 
 # Export the processed file
 combined_data.to_csv("data/processed_data.csv")
+
+def get_summary(df_combined):
+
+    summary_stats = df_combined.groupby("STATION_NAME").agg({"RAW_VALUE": ["max", "min", "mean", "median", "std", "var"]})
+    return summary_stats
+
+get_summary(combined_data).to_csv("data/location_summary.csv")

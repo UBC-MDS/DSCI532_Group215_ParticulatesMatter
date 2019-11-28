@@ -150,7 +150,11 @@ PM25_baseline = process_dataset(PM25_data, baseline = True)
 combined_data = pd.concat([PM10_processed, PM25_processed]).query('STATION_NAME in @shared_locations').reset_index().sort_values(by = ["STATION_NAME", 'index'])
 combined_baseline_data = pd.concat([PM10_baseline, PM25_baseline]).reset_index().sort_values(by = ['index'])
 
+combined_data['index'] = pd.to_datetime(combined_data['index']).astype('str')
+combined_baseline_data['index'] = pd.to_datetime(combined_baseline_data['index']).astype('str')
+
 # Export the processed files
 combined_data.to_csv("data/processed_data.csv")
 combined_baseline_data.to_csv("data/processed_baseline_data.csv")
 get_summary(combined_data).to_csv("data/location_summary.csv")
+

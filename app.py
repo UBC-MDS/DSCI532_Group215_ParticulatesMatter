@@ -11,175 +11,18 @@ import pandas as pd
 import plotly.graph_objs as go
 import plotly_express as px
 import altair as alt
+from src import utils
 
-
-###########################################
-# READ IN TEST DATA
-###########################################
-
-test_df = pd.read_csv('data/pm_kits.csv')
-pollution_data = pd.read_csv('data/processed_data.csv')
-
-
+alt.data_transformers.disable_max_rows()
 
 ###########################################
-# PLOT FUNCTIONS
-###########################################
-def mds_special():
-    font = "Arial"
-    axisColor = "#000000"
-    gridColor = "#DEDDDD"
-    return {
-        "config": {
-            "title": {
-                "fontSize": 24,
-                "font": font,
-                "anchor": "start", # equivalent of left-aligned.
-                "fontColor": "#000000"
-            },
-            'view': {
-                "height": 300, 
-                "width": 400
-            },
-            "axisX": {
-                "domain": True,
-                "gridColor": gridColor,
-                "domainWidth": 1,
-                "grid": False,
-                "labelFont": font,
-                "labelFontSize": 12,
-                "labelAngle": 0, 
-                "tickColor": axisColor,
-                "tickSize": 5, # default, including it just to show you can change it
-                "titleFont": font,
-                "titleFontSize": 16,
-                "titlePadding": 10, # guessing, not specified in styleguide
-                "title": "X Axis Title (units)", 
-            },
-            "axisY": {
-                "domain": False,
-                "grid": True,
-                "gridColor": gridColor,
-                "gridWidth": 1,
-                "labelFont": font,
-                "labelFontSize": 14,
-                "labelAngle": 0, 
-                "titleFont": font,
-                "titleFontSize": 16,
-                "titlePadding": 10, # guessing, not specified in styleguide
-                "title": "Y Axis Title (units)", 
-            },
-        }
-    }
-
-
-alt.data_transformers.enable('json')
-#alt.themes.register('mds_special', mds_special)
-
-def make_heatmap(data, pm = 2.5, width = 550):
-    pm_filter = 'PM25' if pm == 2.5 else 'PM10'
-    temp_data = data[data['PARAMETER'] == pm_filter]
-    
-    return alt.Chart(temp_data, title = f'Concentration of PM{pm} in BC').\
-                mark_rect().\
-                encode(
-                    x=alt.X('index:O', title = 'date'),
-                    y=alt.Y('STATION_NAME:O', title = ''),
-                    color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title=f"Concentration of PM{pm}()")),
-                    tooltip = [alt.Tooltip('index:O', title = 'Date:'),
-                                alt.Tooltip('RAW_VALUE:N', title = 'Polution')]).\
-                properties(
-                    width=width,
-                    height=250
-                )
-
-def make_lineplot(data, pm = 2.5, width = 550, init_locations=[]):
-    pm_filter = 'PM25' if pm == 2.5 else 'PM10'
-    temp_data = data[data['PARAMETER'] == pm_filter]
-    
-    initialize_selection = [{'STATION_NAME': location} for location in init_locations]
-    
-    brush = alt.selection_multi(init=initialize_selection)
-    
-    return alt.Chart(temp_data, title = f'Concentration of PM{pm} in given locations').\
-                mark_line(width = 10).\
-                encode(
-                    x=alt.X('DATE_PST:O', title = 'date'),
-                    y=alt.Y('RAW_VALUE', title = 'Concentration'),
-                    color= alt.condition(brush, 'STATION_NAME', if_false=alt.value('lightgray')),
-                    tooltip = [alt.Tooltip('index:O', title = 'Date:'),
-                                alt.Tooltip('RAW_VALUE:N', title = 'Polution')]).\
-                properties(
-                    width=width,
-                    height = 250
-                ).add_selection(
-                    brush
-                )
-
-def make_second_timeseries(data, location, pms = [2.5, 10], width = 550):
-    temp_data = data[data['STATION_NAME'] == location]
-    if len(pms) == 1:
-        pm = pms[0]
-        pm_filter = 'PM25' if pm == 2.5 else 'PM10'
-        temp_data = temp_data[temp_data['PARAMETER'] == pm_filter]
-    elif len(pms) == 0:
-        temp_data = pd.DataFrame(columns = data.columns)
-    
-    return alt.Chart(temp_data, title = f'Concentration of selected PMs in {location}').\
-                mark_line(width = 10).\
-                encode(
-                    x=alt.X('index:O', title = 'date'),
-                    y=alt.Y('RAW_VALUE', title = 'Concentration()'),
-                    color= alt.Color('PARAMETER'),
-                    tooltip = [alt.Tooltip('index:O', title = 'Date:'),
-                                alt.Tooltip('RAW_VALUE:N', title = 'Polution')]).\
-                properties(
-                    width=width,
-                    height = 250
-                )
-
-
-def make_barchart(data, locations, pm = 2.5, width = 550):
-    pm_filter = 'PM25' if pm == 2.5 else 'PM10'
-    temp_data = data[data['STATION_NAME'].isin(locations)]
-    temp_data = temp_data[temp_data['PARAMETER'] == pm_filter]
-    
-    
-    return alt.Chart(temp_data, title = f'Distribution of concentration of PM{pm} in given locations').\
-                mark_bar(fillOpacity = 0.5).\
-                encode(
-                    x=alt.X('RAW_VALUE', bin=alt.Bin(step=0.25), title = 'Concentration()'),
-                    y = alt.Y('count()',
-                              stack = None,
-                              title = 'Frequency'),
-                    color = alt.Color('STATION_NAME', title='Locations')
-                    ).\
-                properties(
-                    width=width,
-                    height = 250
-                )
-
-# USAGE EXAMPLES
-# df = pd.read_csv('temp_data/processed_data.csv')
-# df_temp = df[df['STATION_NAME'].str.startswith('Vancouver')]
-# 
-# make_heatmap(df_temp, 10)
-# 
-# locations = ["Vancouver International Airport #2"]
-# make_lineplot(df_temp, init_locations=locations)
-# 
-# make_second_timeseries(df_temp, location = "Vancouver Kitsilano")
-# 
-# make_barchart(df_temp, ["Vancouver Kitsilano", "Vancouver International Airport #2"])
-
-###########################################
-# STATIC PLOTS FOR DASHBOARD DRAFT
+# READ IN DATASET
 ###########################################
 
-# srcDoc = make_plot().to_hmtl()
 
+pm_df = pd.read_csv('data/processed_data.csv')
 
-
+Plotter = utils.PlotsCreator(pm_df)
 
 ###########################################
 # APP LAYOUT
@@ -222,9 +65,10 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 html.P("Chart 1 controls:\nPollutant:\n"),
                 
                 dcc.Dropdown(
+                    id = 'pollutant1',
                     options=[
-                        {'label': 'PM2.5', 'value': 'PM2.5'},
-                        {'label': 'PM10', 'value': 'PM10'}
+                        {'label': 'PM2.5', 'value': 2.5},
+                        {'label': 'PM10', 'value': 10}
                     ],
                     
                     value='MTL'
@@ -233,8 +77,9 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 html.P("Location:\n", style={'padding-top':10}),
                 
                 dcc.Dropdown(
+                    id = 'location1',
                     options=[
-                        {'label':k , 'value': k } for k in pollution_data['STATION_NAME'].unique()
+                        {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
                     multi = True,
                     value='MTL'
@@ -245,26 +90,29 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
             #BOX2 GREEN
             html.Div(className="row",  style={'backgroundColor': colors['box2green'], 
                 'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':10, 'border': '1px solid'}, children=[
-            html.P("Chart 2 controls:\nPollutant:\n"),
+            # html.P("Chart 2 controls:\nPollutant:\n"),
             
-            dcc.Dropdown(
-                    options=[
-                        {'label': 'PM2.5', 'value': 'PM2.5'},
-                        {'label': 'PM10', 'value': 'PM10'}
-                    ],
-                    value='MTL'
-                ),
+            # dcc.Dropdown(
+            #         options=[
+            #             {'label': 'PM2.5', 'value': 'PM2.5'},
+            #             {'label': 'PM10', 'value': 'PM10'}
+            #         ],
+            #         value='MTL'
+            #     ),
 
                 html.P("Location:\n", style={'padding-top':5}),
                 
                 dcc.Dropdown(
+                    id = 'location2',
                     options=[
-                        {'label': 'Vancouver', 'value': 'Vancouver'},
-                        {'label': 'Surrey', 'value': 'Surrey'},
-                        {'label': 'Burnaby', 'value': 'Burnaby'}
+                        {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
                     value='MTL'
-                )   ])
+                )
+
+                
+                
+                   ])
         ]),
 
 
@@ -286,7 +134,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= make_lineplot(test_df, pm = 2.5, width = 370,init_locations=['Vancouver Kitsilano']).to_html()
+                    srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver Kitsilano"],height = 250).to_html()
                     ################ The magic happens here
                     ),
             ])
@@ -308,7 +156,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= make_second_timeseries(test_df, 'Vancouver Kitsilano', pms = [2.5, 10], width = 380).to_html()
+                    srcDoc= Plotter.pm_linechart("Vancouver Kitsilano", pms = [2.5, 10], height = 250).to_html()
                     ################ The magic happens here
                     )
                 ])
@@ -325,27 +173,25 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
             #BOX3 YELLOW
             html.Div(className="row",  style={'backgroundColor': colors['box3yellow'], 
                 'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':10, 'border': '1px solid'}, children=[
-            html.P("Chart 3 controls:\nPollutant:\nLocation:\n "),
+            html.P("Chart 3 controls:\nPollutant:\n"),
             
             
             dcc.Dropdown(
+                    id = 'pollutant3',
                     options=[
-                        {'label': 'PM2.5', 'value': 'PM2.5'},
-                        {'label': 'PM10', 'value': 'PM10'}
-                    ],
-                    value='MTL'
+                        {'label': 'PM2.5', 'value': 2.5},
+                        {'label': 'PM10', 'value': 10}
+                    ]
                 ),
 
                 html.P("Location:\n", style={'padding-top':5}),
                 
                 dcc.Dropdown(
+                    id = 'location3',
                     options=[
-                        {'label': 'Vancouver', 'value': 'Vancouver'},
-                        {'label': 'Surrey', 'value': 'Surrey'},
-                        {'label': 'Burnaby', 'value': 'Burnaby'}
+                        {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
-                    multi=True,
-                    value='MTL'
+                    multi=True
                 )   ]),
 
             #BOX4 PURPLE
@@ -354,11 +200,11 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 html.P("Chart 4 controls:\nPollutant:\n "),
                 
                 dcc.Dropdown(
+                    id = 'pollutant4',
                         options=[
-                            {'label': 'PM2.5', 'value': 'PM2.5'},
-                            {'label': 'PM10', 'value': 'PM10'}
-                        ],
-                        value='MTL'
+                            {'label': 'PM2.5', 'value': 2.5},
+                            {'label': 'PM10', 'value': 10}
+                        ]
                     )])
         ]),
 
@@ -379,7 +225,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= make_barchart(test_df, ['Vancouver Kitsilano'], pm = 2.5, width = 400).to_html()
+                    srcDoc= Plotter.make_barchart(["Vancouver Kitsilano", "Abbotsford Central"], pm = 10, width = None, height = 250).to_html()
                     ################ The magic happens here
                     )
                 ])
@@ -402,7 +248,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= make_heatmap(test_df, pm = 2.5, width = 340).to_html()
+                    srcDoc = Plotter.make_heatmap(pm = 2.5, width = 340, height = 250).to_html()
                     ################ The magic happens here
                     )
                 ])
@@ -426,11 +272,52 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
             )   ])
 
     ])
-    
-  
-
-    
 ])
+
+
+@app.callback(
+    dash.dependencies.Output('plot1', 'srcDoc'),
+    [dash.dependencies.Input('pollutant1', 'value'),
+     dash.dependencies.Input('location1', 'value')])
+def update_plot1(pollutant1, location1):
+
+    #pdated_plot = make_plot(xaxxis_column_name, yaxis_column_name)).to_html()
+    updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1,height = 250).to_html()
+
+    return updated_plot1
+
+
+@app.callback(
+    dash.dependencies.Output('plot2', 'srcDoc'),
+    [dash.dependencies.Input('location2', 'value')])
+
+def update_plot2(location2):
+
+    updated_plot2 = Plotter.pm_linechart(location2, pms = [2.5, 10], height = 250).to_html()
+
+    return updated_plot2
+
+
+#@app.callback(
+#    dash.dependencies.Output('plot3', 'srcDoc'),
+#    [dash.dependencies.Input('location3', 'value'),
+#     dash.dependencies.Input('pollutant3', 'value')])
+
+#def update_plot3(location3, pollutant3):
+#    print(type(location3))
+
+#    updated_plot3 = Plotter.make_barchart(list(location3), pm = pollutant3, width = None, height = 250).to_html()
+
+#    return updated_plot3
+
+@app.callback(
+    dash.dependencies.Output('plot4', 'srcDoc'),
+    [dash.dependencies.Input('pollutant4', 'value')])
+
+def update_plot4(pollutant4=2.5):
+
+    updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 340, height = 250).to_html()
+    return updated_plot4
 
 
 if __name__ == '__main__':

@@ -5,8 +5,6 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-import nltk
-import json
 import pandas as pd
 import plotly.graph_objs as go
 import plotly_express as px
@@ -71,7 +69,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label': 'PM10', 'value': 10}
                     ],
                     
-                    value='MTL'
+                    value=2.5
                 ),
 
                 html.P("Location:\n", style={'padding-top':10}),
@@ -82,7 +80,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
                     multi = True,
-                    value='MTL'
+                    value=pm_df['STATION_NAME'].unique()[0]
                 )    
                 
                 ]),
@@ -107,7 +105,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     options=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
-                    value='MTL'
+                    value=pm_df['STATION_NAME'].unique()[0]
                 )
 
                 
@@ -156,7 +154,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= Plotter.pm_linechart("Vancouver Kitsilano", pms = [2.5, 10], height = 250).to_html()
+                    srcDoc= Plotter.pm_linechart("Vancouver Kitsilano", pms = [2.5, 10], height = 250, width = 300).to_html()
                     ################ The magic happens here
                     )
                 ])
@@ -181,7 +179,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     options=[
                         {'label': 'PM2.5', 'value': 2.5},
                         {'label': 'PM10', 'value': 10}
-                    ]
+                    ],
+                    value = 2.5
                 ),
 
                 html.P("Location:\n", style={'padding-top':5}),
@@ -191,7 +190,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     options=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
-                    multi=True
+                    multi=True,
+                    value = list(pm_df['STATION_NAME'].unique()[0:2])
                 )   ]),
 
             #BOX4 PURPLE
@@ -204,7 +204,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         options=[
                             {'label': 'PM2.5', 'value': 2.5},
                             {'label': 'PM10', 'value': 10}
-                        ]
+                        ],
+                        value = 2.5
                     )])
         ]),
 
@@ -215,7 +216,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'margin-left':10, 'margin-right':10, "padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("Chart 3: Histograms chart", style={"backgroundColor": colors['box3yellow'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
+                html.H6("Chart 3: Histograms chart", id = 'title 3', style={"backgroundColor": colors['box3yellow'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -225,7 +226,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= Plotter.make_barchart(["Vancouver Kitsilano", "Abbotsford Central"], pm = 10, width = None, height = 250).to_html()
+                    srcDoc= Plotter.make_barchart(["Abbotsford"], pm = 2.5, width = None, height = 250).to_html()
                     ################ The magic happens here
                     )
                 ])
@@ -282,7 +283,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
 def update_plot1(pollutant1, location1):
 
     #pdated_plot = make_plot(xaxxis_column_name, yaxis_column_name)).to_html()
-    updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1,height = 250).to_html()
+    updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1,height = 220, width = 320).to_html()
 
     return updated_plot1
 
@@ -293,22 +294,22 @@ def update_plot1(pollutant1, location1):
 
 def update_plot2(location2):
 
-    updated_plot2 = Plotter.pm_linechart(location2, pms = [2.5, 10], height = 250).to_html()
+    updated_plot2 = Plotter.pm_linechart(location2, pms = [2.5, 10], height = 220, width = 400).to_html()
 
     return updated_plot2
 
 
-#@app.callback(
-#    dash.dependencies.Output('plot3', 'srcDoc'),
-#    [dash.dependencies.Input('location3', 'value'),
-#     dash.dependencies.Input('pollutant3', 'value')])
+@app.callback(
+    dash.dependencies.Output('plot3', 'srcDoc'),
+    [dash.dependencies.Input('location3', 'value'),
+     dash.dependencies.Input('pollutant3', 'value')])
 
-#def update_plot3(location3, pollutant3):
-#    print(type(location3))
+def update_plot3(location3, pollutant3):
+# # #    print(type(location3))
 
-#    updated_plot3 = Plotter.make_barchart(list(location3), pm = pollutant3, width = None, height = 250).to_html()
+    updated_plot3 = Plotter.make_barchart(location3, pm = pollutant3, width = 350, height = 220).to_html()
 
-#    return updated_plot3
+    return updated_plot3
 
 @app.callback(
     dash.dependencies.Output('plot4', 'srcDoc'),
@@ -316,7 +317,7 @@ def update_plot2(location2):
 
 def update_plot4(pollutant4=2.5):
 
-    updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 340, height = 250).to_html()
+    updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 280, height = 220).to_html()
     return updated_plot4
 
 

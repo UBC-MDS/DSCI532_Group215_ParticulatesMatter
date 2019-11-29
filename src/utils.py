@@ -10,13 +10,18 @@ class PlotsCreator:
     of one specified PM and different locations, heatmap with all the data,
     linechart with up to two PMs and one location, and linechart with one
     PM and multiple locations.
+
+    Note: If data_avg is provided, average PM values will be depicted in
+        both lineplots.
     """
 
-    def __init__(self, data, widths=500, heights=500):
+    def __init__(self, data, data_avg=None, widths=500, heights=500):
         """__init__ takes necessary data and properties for later use
 
         Args:
             data (pandas.core.frame.DataFrame): pre-processed data
+            data_avg (pandas.core.frame.DataFrame): pre-pricessed data that
+                    contains averages of PMs for each date.
             widths (int): Width of each individual plot. This property can be
                     adjusted in each plot function.
             heights (int): Height of each individual plot. This property can be
@@ -28,6 +33,7 @@ class PlotsCreator:
 
         """
         self.data = data
+        self.data_avg = data_avg
         self.width = widths
         self.height = heights
 
@@ -78,7 +84,7 @@ class PlotsCreator:
                         height = height
                     )
 
-    def pm_linechart(self, location, pms = [2.5, 10], width = None, height = None):
+    def pm_linechart(self, location, pms = [2.5, 10], width = None, height = None, start_date=None, end_date=None):
         """
         Plots linechart with up to two PMs and one location.
 
@@ -105,6 +111,13 @@ class PlotsCreator:
 
 
         temp_data = self.data[self.data['STATION_NAME'] == location]
+
+        if start_date:
+            temp_data = temp_data[temp_data['index'] > start_date]
+        if end_date:
+            temp_data = temp_data[temp_data['index'] < end_date]
+
+
         if len(pms) == 1:
             pm = pms[0]
             pm_filter = 'PM25' if pm == 2.5 else 'PM10'
@@ -112,32 +125,69 @@ class PlotsCreator:
         elif len(pms) == 0:
             temp_data = pd.DataFrame(columns = data.columns)
 
+
         keyvals = pd.date_range(temp_data['index'].min(), temp_data['index'].max(), freq='MS').astype(int) // 1000000
 
-        return alt.Chart(temp_data).mark_line(
-            width = 10
-        ).transform_window(
-            rolling_mean='mean(RAW_VALUE)',
-            frame=[-2, 2],
-            groupby = ['PARAMETER']
-        ).encode(
-            x=alt.X('index:T', title = 'date'),
-            y=alt.Y('rolling_mean:Q',
-                title = 'Concentration()',
-                impute=alt.ImputeParams(value=None, keyvals=list(keyvals))
-            ),
-            color= alt.Color('PARAMETER'),
-            tooltip = [alt.Tooltip('index:T', title = 'Date:'),
-                       alt.Tooltip('RAW_VALUE:N', title = 'Pollution')]
-        ).properties(
-            title=f'Concentration of selected PMs in {location}',
-            width=width,
-            height=600
-        )
+        base_plot = alt.Chart(temp_data).mark_line(
+                            width = 10,
+                            point = True
+                        ).transform_window(
+                            rolling_mean='mean(RAW_VALUE)',
+                            frame=[-2, 2],
+                            groupby = ['PARAMETER']
+                        ).encode(
+                            x=alt.X('index:T', title = 'date'),
+                            y=alt.Y('rolling_mean:Q',
+                                title = 'Concentration()',
+                                impute=alt.ImputeParams(value=None, keyvals=list(keyvals))
+                            ),
+                            color= alt.Color('PARAMETER'),
+                            tooltip = [alt.Tooltip('index:T', title = 'Date:'),
+                                       alt.Tooltip('RAW_VALUE:N', title = 'Pollution')]
+                        ).properties(
+                            title=f'Concentration of selected PMs in {location}',
+                            width=width,
+                            height=height
+                        )
+
+        if self.data_avg is not None:
+
+            avg_d = self.data_avg[self.data_avg['PARAMETER'] == pm_filter] if len(pms) == 1 else self.data_avg
+
+            if start_date:
+                avg_d = avg_d[avg_d['index'] > start_date]
+            if end_date:
+                avg_d = avg_d[avg_d['index'] < end_date]
+
+
+            return alt.Chart(avg_d).mark_line(
+                            width = 10,
+                            point = True
+                        ).transform_window(
+                            rolling_mean='mean(RAW_VALUE)',
+                            frame=[-2, 2],
+                            groupby = ['PARAMETER']
+                        ).encode(
+                            x=alt.X('index:T', title = 'date'),
+                            y=alt.Y('rolling_mean:Q',
+                                title = 'Concentration()',
+                                impute=alt.ImputeParams(value=None, keyvals=list(keyvals))
+                            ),
+                            detail = alt.Color('PARAMETER'),
+                            color = alt.value('lightgray'),
+                            tooltip = [alt.Tooltip('index:T', title = 'Date:'),
+                                       alt.Tooltip('RAW_VALUE:N', title = 'Pollution')]
+                        ).properties(
+                            title=f'Concentration of selected PMs in {location}',
+                            width=width,
+                            height=height
+                        ) + base_plot
+
+        return base_plot
 
 
 
-    def location_linechart(self, pm = 2.5, init_locations=[], width = None, height = None):
+    def location_linechart(self, pm = 2.5, init_locations=[], width = None, height = None, start_date=None, end_date=None):
         """
         Plots linechart with one PM and multiple locations.
 
@@ -169,8 +219,18 @@ class PlotsCreator:
         pm_filter = 'PM25' if pm == 2.5 else 'PM10'
         temp_data = self.data[self.data['PARAMETER'] == pm_filter]
 
-        random_locations = random.choices(list(temp_data['STATION_NAME']), k=6)
-        temp_data = temp_data[temp_data['STATION_NAME'].isin(set(init_locations + random_locations))]
+        temp_data = temp_data[temp_data['STATION_NAME'].isin(set(init_locations))]
+        if self.data_avg is not None:
+            avg_data = self.data_avg[self.data_avg['PARAMETER'] == pm_filter]
+            avg_data['STATION_NAME'] = ['average']*len(avg_data)
+
+            temp_data = pd.concat((temp_data, avg_data)).reset_index()
+
+        if start_date:
+            temp_data = temp_data[temp_data['index'] > start_date]
+        if end_date:
+            temp_data = temp_data[temp_data['index'] < end_date]
+
 
 
         initialize_selection = [{'STATION_NAME': location} for location in init_locations]
@@ -180,23 +240,36 @@ class PlotsCreator:
         keyvals = pd.date_range(temp_data['index'].min(), temp_data['index'].max(), freq='MS').astype(int) // 1000000
 
         line_highlight = alt.Chart(temp_data).mark_line(width = 10, point=True).\
-        transform_window(
-            rolling_mean='mean(RAW_VALUE)',
-            frame=[-2, 2],
-            groupby = ['PARAMETER']
-        ).encode(
-            x=alt.X('index:T', title = 'date'),
-            y=alt.Y('rolling_mean:Q', title = 'Concentration',
-                   impute=alt.ImputeParams(value=None, keyvals=list(keyvals))),
-            color = alt.condition(brush, 'STATION_NAME', if_false=alt.value('lightgray')),
-        ).transform_filter(
-            brush
-        ).properties(
-            width=width,
-            height = height
-        )
+                        transform_window(
+                            rolling_mean='mean(RAW_VALUE)',
+                            frame=[-2, 2],
+                            groupby = ['PARAMETER']
+                        ).encode(
+                            x=alt.X('index:T', title = 'date'),
+                            y=alt.Y('rolling_mean:Q', title = 'Concentration',
+                                   impute=alt.ImputeParams(value=None, keyvals=list(keyvals))),
+                            color = alt.condition(brush, 'STATION_NAME', if_false=alt.value('lightgray')),
+                            tooltip = [alt.Tooltip('index:T', title = 'Date:'),
+                                alt.Tooltip('RAW_VALUE:N', title = 'Polution'),
+                                alt.Tooltip('STATION_NAME:N', title = 'Location')]
+                        ).transform_filter(
+                            brush
+                        ).properties(
+                            width=width,
+                            height = height
+                        ).add_selection(
+                            brush
+                        )
 
-        return alt.Chart(temp_data, title = f'Concentration of PM{pm} in given locations').\
+        if self.data_avg is not None:
+            if start_date:
+                avg_data = avg_data[avg_data['index'] > start_date]
+            if end_date:
+                avg_data = avg_data[avg_data['index'] < end_date]
+
+
+
+            return alt.Chart(avg_data, title = f'Concentration of PM{pm} in given locations').\
                     mark_line(width = 10, point=True).\
                     transform_window(
                         rolling_mean='mean(RAW_VALUE)',
@@ -207,15 +280,16 @@ class PlotsCreator:
                         x=alt.X('index:T', title = 'date'),
                         y=alt.Y('rolling_mean:Q', title = 'Concentration',
                                impute=alt.ImputeParams(value=None, keyvals=list(keyvals))),
-                        color= alt.condition(brush, 'STATION_NAME', if_false=alt.value('lightgray')),
+                        color= alt.value('lightgray'),
                         tooltip = [alt.Tooltip('index:T', title = 'Date:'),
-                                    alt.Tooltip('RAW_VALUE:N', title = 'Polution')]).\
+                                    alt.Tooltip('RAW_VALUE:N', title = 'Polution'),
+                                    alt.Tooltip('STATION_NAME:N', title = 'Location')]).\
                     properties(
                         width=width,
                         height = height
-                    ).add_selection(
-                        brush
                     ) + line_highlight
+
+        return line_highlight
 
 
     def make_heatmap(self, pm = 2.5, width = None, height = None):
@@ -246,13 +320,12 @@ class PlotsCreator:
 
         pm_filter = 'PM25' if pm == 2.5 else 'PM10'
         temp_data = self.data[self.data['PARAMETER'] == pm_filter]
+
         return alt.Chart(temp_data, title = f'Concentration of PM{pm} in BC').\
                     mark_rect().\
                     encode(
-                        x=alt.X('index:O', title = 'date'),
-                        y=alt.Y('STATION_NAME:O', title = '', impute=alt.ImputeParams(
-                              value=None
-                            )),
+                        x=alt.X('index:O', title = 'date', ),
+                        y=alt.Y('STATION_NAME:O', title = ''),
                         color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title=f"Concentration of PM{pm}()")),
                         tooltip = [alt.Tooltip('index:O', title = 'Date:'),
                                     alt.Tooltip('RAW_VALUE:N', title = 'Polution'),

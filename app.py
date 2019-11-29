@@ -24,6 +24,9 @@ pm_df = pd.read_csv('data/processed_data.csv')
 
 Plotter = utils.PlotsCreator(pm_df)
 
+def alter_text(title_text = "test"):
+    return title_text
+
 ###########################################
 # APP LAYOUT
 ###########################################
@@ -125,7 +128,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'margin-left':10, 'margin-right':10, "padding": 0}, children=[
             
             html.Div(className="row", children=[
-                html.H6("Chart 1: Multi-location, pollutant map", style={"backgroundColor": colors['box1blue'], 'border': '1px solid', 'text-align': 'center', 'padding-left':5}),
+                html.H6(alter_text(), id = 'plot1_title', style={"backgroundColor": colors['box1blue'], 'border': '1px solid', 'text-align': 'center', 'padding-left':5}),
                 html.Iframe(
                     sandbox='allow-scripts',
                     id='plot1',
@@ -276,15 +279,16 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
 
 
 @app.callback(
-    dash.dependencies.Output('plot1', 'srcDoc'),
+    [dash.dependencies.Output('plot1', 'srcDoc'),
+    dash.dependencies.Output('plot1_title', 'children')],
     [dash.dependencies.Input('pollutant1', 'value'),
      dash.dependencies.Input('location1', 'value')])
 def update_plot1(pollutant1, location1):
 
     #pdated_plot = make_plot(xaxxis_column_name, yaxis_column_name)).to_html()
-    updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1,height = 250).to_html()
-
-    return updated_plot1
+    updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1, height = 250).to_html()
+    updated_title = alter_text(pollutant1)
+    return updated_plot1, updated_title
 
 
 @app.callback(

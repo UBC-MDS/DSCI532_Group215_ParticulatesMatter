@@ -69,7 +69,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label': 'PM10', 'value': 10}
                     ],
                     
-                    value=2.5
+                    value=2.5,
+                    clearable = False
                 ),
 
                 html.P("Location:\n", style={'padding-top':10}),
@@ -105,7 +106,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     options=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
-                    value=pm_df['STATION_NAME'].unique()[0]
+                    value=pm_df['STATION_NAME'].unique()[0],
+                    clearable = False
                 )
 
                 
@@ -180,7 +182,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label': 'PM2.5', 'value': 2.5},
                         {'label': 'PM10', 'value': 10}
                     ],
-                    value = 2.5
+                    value = 2.5,
+                    clearable = False
                 ),
 
                 html.P("Location:\n", style={'padding-top':5}),
@@ -205,7 +208,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                             {'label': 'PM2.5', 'value': 2.5},
                             {'label': 'PM10', 'value': 10}
                         ],
-                        value = 2.5
+                        value = 2.5,
+                        clearable = False
                     )])
         ]),
 

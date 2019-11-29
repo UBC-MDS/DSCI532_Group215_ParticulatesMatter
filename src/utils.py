@@ -37,7 +37,7 @@ class PlotsCreator:
         self.width = widths
         self.height = heights
 
-    def make_barchart(self, locations, pm = 2.5, width = None, height = None):
+    def make_barchart(self, locations, pm = 2.5, width = None, height = None, start_date = None, end_date = None):
         """
         Plots Barchart with given locations and pm
 
@@ -68,6 +68,13 @@ class PlotsCreator:
         pm_filter = 'PM25' if pm == 2.5 else 'PM10'
         temp_data = self.data[self.data['STATION_NAME'].isin(locations)]
         temp_data = temp_data[temp_data['PARAMETER'] == pm_filter]
+
+
+        if start_date:
+            temp_data = temp_data[temp_data['index'] > start_date]
+        if end_date:
+            temp_data = temp_data[temp_data['index'] < end_date]
+
 
 
         return alt.Chart(temp_data, title = f'Distribution of concentration of PM{pm} in given locations').\

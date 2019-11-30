@@ -50,14 +50,18 @@ class PlotsCreator:
                     over the global class value. Default = None
             height (int): Height of the plot. If provided, it will be preferred
                     over the global class value. Default = None
+            start_date : The start date to highlight in red when plotting
+            end_date : The end date to highlight in red when plotting
 
+        Note: The type of the start_date and end_date should be the same as the
+                'index' column of the data provided
 
         Returns:
             (altair.Chart) Altair chart
 
         Examples:
-            make_barchart(locations = ["Vancouver Kitsilano", "Abbotsford Central"])
-            make_barchart(locations = ["Vancouver Kitsilano", "Abbotsford Central"],
+            make_barchart(locations = ["Vancouver", "Abbotsford"])
+            make_barchart(locations = ["Vancouver", "Abbotsford"],
                             pm = 10)
 
         """
@@ -103,13 +107,20 @@ class PlotsCreator:
                     over the global class value. Default = None
             height (int): Height of the plot. If provided, it will be preferred
                     over the global class value. Default = None
+            start_date : The start date to highlight in red when plotting
+            end_date : The end date to highlight in red when plotting
+
+        Note: The type of the start_date and end_date should be the same as the
+                'index' column of the data provided
 
         Returns:
             (altair.Chart) Altair chart
 
         Examples:
-            pm_linechart(location = "Vancouver Kitsilano")
-            pm_linechart(location = "Vancouver Kitsilano", pms = [2.5])
+            pm_linechart(location = "Vancouver")
+            pm_linechart(location = "Vancouver", pms = [2.5],
+                                start_date = '2005-01-01',
+                                end_date = '2008-01-01')
 
         """
 
@@ -207,14 +218,21 @@ class PlotsCreator:
                     over the global class value. Default = None
             height (int): Height of the plot. If provided, it will be preferred
                     over the global class value. Default = None
+            start_date : The start date to highlight in red when plotting
+            end_date : The end date to highlight in red when plotting
+
+        Note: The type of the start_date and end_date should be the same as the
+                'index' column of the data provided
 
         Returns:
             (altair.Chart) Altair chart
 
         Examples:
-            location_linechart(init_locations = "Vancouver Kitsilano")
-            location_linechart(init_locations = ["Vancouver Kitsilano",
-                                "Abbotsford Central"], pm = 10)
+            location_linechart(init_locations = "Vancouver")
+            location_linechart(init_locations = ["Vancouver",
+                                "Abbotsford"], pm = 10,
+                                start_date = '2005-01-01',
+                                end_date = '2008-01-01')
 
         """
 
@@ -297,7 +315,7 @@ class PlotsCreator:
         return line_highlight
 
 
-    def make_heatmap(self, pm = 2.5, width = None, height = None):
+    def make_heatmap(self, pm = 2.5, width = None, height = None, start_date = None, end_date = None):
         """
         Plots heatmap with all locations and given pm
 
@@ -310,12 +328,19 @@ class PlotsCreator:
                     over the global class value. Default = None
             height (int): Height of the plot. If provided, it will be preferred
                     over the global class value. Default = None
+            start_date : The start date to highlight in red when plotting
+            end_date : The end date to highlight in red when plotting
+
+        Note: The type of the start_date and end_date should be the same as the
+                'index' column of the data provided
 
         Returns:
             (altair.Chart) Altair chart
 
         Examples:
-            make_heatmap(pm = 10)
+            make_heatmap(pm = 10,
+                    start_date = '2005-01-01',
+                    end_date = '2008-01-01')
 
         """
 
@@ -325,12 +350,16 @@ class PlotsCreator:
 
         pm_filter = 'PM25' if pm == 2.5 else 'PM10'
         temp_data = self.data[self.data['PARAMETER'] == pm_filter]
+        temp_data['RAW_VALUE'] = temp_data['RAW_VALUE'].clip(
+                                        upper = temp_data['RAW_VALUE'].quantile(0.99))
 
-        return alt.Chart(temp_data, title = f'Concentration of PM{pm} in BC').\
+        temp_data['index'] = pd.to_datetime(temp_data['index'])
+
+        base_chart = alt.Chart(temp_data, title = f'Concentration of PM{pm} in BC').\
                     mark_rect().\
                     encode(
                         x=alt.X('index:O', title = 'date', ),
-                        y=alt.Y('STATION_NAME:O', title = ''),
+                        y=alt.Y('STATION_NAME:N', title = ''),
                         color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title=f"Concentration of PM{pm}()")),
                         tooltip = [alt.Tooltip('index:O', title = 'Date:'),
                                     alt.Tooltip('RAW_VALUE:N', title = 'Polution'),
@@ -339,5 +368,19 @@ class PlotsCreator:
                         width = width,
                         height = height
                     )
+
+        if start_date is not None or end_date is not None:
+            start_date = pd.to_datetime(start_date)
+            end_date = pd.to_datetime(end_date)
+
+            lines = pd.DataFrame({'val': [v for v in (start_date, end_date) if v is not None]})
+
+            rule = alt.Chart(lines).mark_rule(color='red').encode(
+                x =alt.X('val:O', title = 'filter', axis = None)
+            )
+
+            return base_chart + rule
+
+        return base_chart
 
 

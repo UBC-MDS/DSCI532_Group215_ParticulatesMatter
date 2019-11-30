@@ -95,7 +95,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
 
             #BOX2 GREEN
             html.Div(className="row",  style={'backgroundColor': colors['box2green'], 
-                'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':100, 'border': '1px solid'}, children=[
+                'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':88, 'border': '1px solid'}, children=[
             # html.P("Chart 2 controls:\nPollutant:\n"),
             
             # dcc.Dropdown(
@@ -136,7 +136,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 html.Iframe(
                     sandbox='allow-scripts',
                     id='plot1',
-                    height='300',
+                    height='290',
                     width='550',
                     style={'border-width': '0'},
 
@@ -158,7 +158,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 html.Iframe(
                     sandbox='allow-scripts',
                     id='plot2',
-                    height='300',
+                    height='290',
                     width='550',
                     style={'border-width': '0'},
 
@@ -206,7 +206,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
 
             #BOX4 PURPLE
             html.Div(className="row",  style={'backgroundColor': colors['box4purple'], 
-                'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':90, 'border': '1px solid'}, children=[
+                'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':60, 'border': '1px solid'}, children=[
                 html.P("Chart 4 controls:\nPollutant:\n "),
                 
                 dcc.Dropdown(
@@ -300,8 +300,8 @@ def update_plot1(pollutant1, location1, daterange):
 #     if type(location1) == str:
 #         location1 = [location1]
 
-    updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange = daterange).to_html()
-    updated_title1 = "Chart 1: Distribution of PM" + str(pollutant1) + " Concentration for given locations"
+    updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 220, daterange = daterange).to_html()
+    updated_title1 = "Chart 1: PM" + str(pollutant1) + " Concentration for given locations"
 
     return updated_plot1, updated_title1
 
@@ -344,7 +344,7 @@ def update_plot3(location3, pollutant3, daterange):
 
 def update_plot4(pollutant4, daterange):
 
-    updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 280, height = 220, daterange=daterange).to_html()
+    updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 450, height = 250, daterange=daterange).to_html()
     updated_title4 = "Chart 4: PM" + str(pollutant4) + " Concentration Heatmap"
 
     return updated_plot4, updated_title4

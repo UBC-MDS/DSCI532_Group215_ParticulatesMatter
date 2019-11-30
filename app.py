@@ -140,9 +140,17 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
+<<<<<<< HEAD
                     srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange=[2005,2010]).to_html()
 
                    
+=======
+
+                    srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange=[2005,2010]).to_html()
+
+                   
+
+>>>>>>> 799cb27ff25185a7309c575a06df18ecc17b0885
                     ################ The magic happens here
                     ),
             ])
@@ -164,7 +172,13 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
+<<<<<<< HEAD
                     srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
+=======
+
+                    srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
+
+>>>>>>> 799cb27ff25185a7309c575a06df18ecc17b0885
                     ################ The magic happens here
                     )
                 ])
@@ -297,16 +311,25 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
      dash.dependencies.Input('location1', 'value'),
      dash.dependencies.Input('daterange', 'value')])
 def update_plot1(pollutant1, location1, daterange):
+<<<<<<< HEAD
    
     updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange = daterange).to_html()
     updated_title1 = "Distribution of PM" + str(pollutant1) + " Concentration for given locations"
 
+=======
+
+
+    #pdated_plot = make_plot(xaxxis_column_name, yaxis_column_name)).to_html()
+    updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1, height = 220, width = 320).to_html()
+    updated_title1 = "Chart 1: PM" + str(pollutant1) +" concentration for BC Cities"
+>>>>>>> 799cb27ff25185a7309c575a06df18ecc17b0885
     return updated_plot1, updated_title1
 
 
 @app.callback(
     [dash.dependencies.Output('plot2', 'srcDoc'),
     dash.dependencies.Output('plot2_title', 'children')],
+<<<<<<< HEAD
     [dash.dependencies.Input('location2', 'value'),
      dash.dependencies.Input('daterange', 'value')])
 def update_plot2(location2, daterange):
@@ -315,6 +338,18 @@ def update_plot2(location2, daterange):
     updated_title2 = "Pollutant Concentration in " + str(location2)
 
     return updated_plot2, updated_title2
+=======
+    [dash.dependencies.Input('location2', 'value')])
+
+def update_plot2(location2, daterange):
+
+
+    updated_plot2 = Plotter.pm_linechart(location =location2, pms = [2.5, 10], height = 220, width = 400, daterange=daterange).to_html()
+    updated_title2 = "Chart 2: Pollutant Concentration in " + str(location2) 
+    
+    return updated_plot2, updated_title2
+
+>>>>>>> 799cb27ff25185a7309c575a06df18ecc17b0885
 
 
 @app.callback(
@@ -325,17 +360,22 @@ def update_plot2(location2, daterange):
      dash.dependencies.Input('daterange', 'value')])
 
 def update_plot3(location3, pollutant3, daterange):
-# # #    print(type(location3))
 
+<<<<<<< HEAD
 
     updated_plot3 = Plotter.make_barchart(location3, pm = pollutant3, width = 350, height = 220, daterange=daterange).to_html()
 
     updated_title3 = "Distribution of PM" + str(pollutant3) + " Concentration for BC Cities"
+=======
+    updated_plot3 = Plotter.make_barchart(location3, pm = pollutant3, width = 350, height = 220, daterange=daterange).to_html()
+    updated_title3 = "Chart 3: Distribution of PM" + str(pollutant3) + " Concentration for BC Cities"
+>>>>>>> 799cb27ff25185a7309c575a06df18ecc17b0885
     return updated_plot3, updated_title3
 
 @app.callback(
     [dash.dependencies.Output('plot4', 'srcDoc'),
     dash.dependencies.Output('plot4_title', 'children')],
+<<<<<<< HEAD
     [dash.dependencies.Input('pollutant4', 'value'),
      dash.dependencies.Input('daterange', 'value')])
 
@@ -344,6 +384,15 @@ def update_plot4(pollutant4, daterange):
 
     updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 280, height = 220, daterange=daterange).to_html()
     updated_title4 = "PM" + str(pollutant4) + " Concentration Heatmap"
+=======
+    [dash.dependencies.Input('pollutant4', 'value')])
+
+def update_plot4(pollutant4, daterange):
+
+
+    updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 280, height = 220, daterange=daterange).to_html()
+    updated_title4 = "Chart 4: PM" + str(pollutant4) + " Concentration Heatmap"
+>>>>>>> 799cb27ff25185a7309c575a06df18ecc17b0885
     return updated_plot4, updated_title4
 
 

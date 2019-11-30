@@ -37,7 +37,7 @@ class PlotsCreator:
         self.width = widths
         self.height = heights
 
-    def make_barchart(self, locations, pm = 2.5, width = None, height = None, start_date = None, end_date = None):
+    def make_barchart(self, locations, pm = 2.5, width = None, height = None, daterange=[2000,2017]):
         """
         Plots Barchart with given locations and pm
 
@@ -65,7 +65,9 @@ class PlotsCreator:
                             pm = 10)
 
         """
-
+        start_date = str(daterange[0])+'-01-01' 
+        end_date = str(daterange[1])+'-01-01'
+        
         width = self.width if not width else width
         height = self.height if not height else height
 
@@ -95,7 +97,7 @@ class PlotsCreator:
                         height = height
                     )
 
-    def pm_linechart(self, location, pms = [2.5, 10], width = None, height = None, start_date=None, end_date=None):
+    def pm_linechart(self, location, pms = [2.5, 10], width = None, height = None, daterange=[2000,2017]):
         """
         Plots linechart with up to two PMs and one location.
 
@@ -123,6 +125,9 @@ class PlotsCreator:
                                 end_date = '2008-01-01')
 
         """
+
+        start_date = str(daterange[0])+'-01-01' 
+        end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
         height = self.height if not height else height
@@ -203,7 +208,7 @@ class PlotsCreator:
 
 
 
-    def location_linechart(self, pm = 2.5, init_locations=[], width = None, height = None, start_date=None, end_date=None):
+    def location_linechart(self, pm = 2.5, init_locations=[], width = None, height = None, daterange =[2000,2017]):
         """
         Plots linechart with one PM and multiple locations.
 
@@ -235,6 +240,8 @@ class PlotsCreator:
                                 end_date = '2008-01-01')
 
         """
+        start_date = str(daterange[0])+'-01-01' 
+        end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
         height = self.height if not height else height
@@ -315,7 +322,7 @@ class PlotsCreator:
         return line_highlight
 
 
-    def make_heatmap(self, pm = 2.5, width = None, height = None, start_date = None, end_date = None):
+    def make_heatmap(self, pm = 2.5, width = None, height = None, daterange=[2000,2017]):
         """
         Plots heatmap with all locations and given pm
 
@@ -344,6 +351,8 @@ class PlotsCreator:
 
         """
 
+        start_date = str(daterange[0])+'-01-01' 
+        end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
         height = self.height if not height else height
@@ -358,11 +367,11 @@ class PlotsCreator:
         base_chart = alt.Chart(temp_data, title = f'Concentration of PM{pm} in BC').\
                     mark_rect().\
                     encode(
-                        x=alt.X('index:O', title = 'date', ),
-                        y=alt.Y('STATION_NAME:N', title = ''),
-                        color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title=f"Concentration of PM{pm}()")),
+                        x=alt.X('index:O', title = 'date', axis = alt.Axis(labels=False, ticks=False)),
+                        y=alt.Y('STATION_NAME:N', title = 'Location',  axis=alt.Axis(labels=False, ticks=False)),
+                        color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title=f"")),
                         tooltip = [alt.Tooltip('index:O', title = 'Date:'),
-                                    alt.Tooltip('RAW_VALUE:N', title = 'Polution'),
+                                    alt.Tooltip('RAW_VALUE:N', title = 'Pollution'),
                                     alt.Tooltip('STATION_NAME:O', title = 'Location')]).\
                     properties(
                         width = width,
@@ -379,7 +388,7 @@ class PlotsCreator:
                 x =alt.X('val:O', title = 'filter', axis = None)
             )
 
-            return base_chart + rule
+            return (base_chart + rule)
 
         return base_chart
 

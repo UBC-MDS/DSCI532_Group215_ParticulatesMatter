@@ -1,4 +1,4 @@
-
+ 
 # external libraries
 import dash
 import dash_core_components as dcc
@@ -50,7 +50,9 @@ colors = {"white": "#ffffff",
 app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     # HEADER
     html.Div(className="row", style={'backgroundColor': colors['banner_blue'], 'border': '1px solid', "padding-left": 5}, children=[
-        html.H3('Pollutants Matter BC – visualization of particulate matter concentrations',
+        html.H3('Pollutants Matter BC – visualization of particulate matter concentrations (weighted monthly averages)',
+                style={'color':colors['black'], 'margin-top':2, 'margin-bottom':2}),
+        html.H6('Data is attributed to the BC Ministry of Environment and Climate Change Strategy',
                 style={'color':colors['black'], 'margin-top':2, 'margin-bottom':2})
     ]),
     
@@ -73,7 +75,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label': 'PM10', 'value': 10}
                     ],
                     
-                    value=2.5
+                    value=2.5,
+                    clearable = False
                 ),
 
                 html.P("Location:\n", style={'padding-top':10}),
@@ -109,7 +112,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     options=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
-                    value=pm_df['STATION_NAME'].unique()[0]
+                    value=pm_df['STATION_NAME'].unique()[0],
+                    clearable = False
                 )
 
                 
@@ -127,7 +131,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'margin-left':10, 'margin-right':10, "padding": 0}, children=[
             
             html.Div(className="row", children=[
-                html.H6("Chart 1: Multi-location, pollutant map", style={"backgroundColor": colors['box1blue'], 'border': '1px solid', 'text-align': 'center', 'padding-left':5}),
+                html.H6("Chart 1: Concentration of PM2.5 for given locations"  , id = 'plot1_title', style={"backgroundColor": colors['box1blue'], 'border': '1px solid', 'text-align': 'center', 'padding-left':5}),
                 html.Iframe(
                     sandbox='allow-scripts',
                     id='plot1',
@@ -136,9 +140,11 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
+
                     srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange=[2005,2010]).to_html()
 
                    
+
                     ################ The magic happens here
                     ),
             ])
@@ -150,7 +156,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0, "padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("Chart 2: Multi-pollutant, location map", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
+                html.H6("Chart 2: Pollutant Concentration in Abbotsford", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -160,7 +166,9 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
+
                     srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
+
                     ################ The magic happens here
                     )
                 ])
@@ -186,7 +194,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label': 'PM2.5', 'value': 2.5},
                         {'label': 'PM10', 'value': 10}
                     ],
-                    value = 2.5
+                    value = 2.5,
+                    clearable = False
                 ),
 
                 html.P("Location:\n", style={'padding-top':5}),
@@ -211,7 +220,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                             {'label': 'PM2.5', 'value': 2.5},
                             {'label': 'PM10', 'value': 10}
                         ],
-                        value = 2.5
+                        value = 2.5,
+                        clearable = False
                     )])
         ]),
 
@@ -222,7 +232,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'margin-left':10, 'margin-right':10, "padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("Chart 3: Histograms chart", id = 'title 3', style={"backgroundColor": colors['box3yellow'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
+                html.H6("Chart 3: Distribution of PM2.5 Concentrations for BC Cities", id = 'plot3_title', style={"backgroundColor": colors['box3yellow'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -245,7 +255,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0,"padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("Chart 4: Heatmap chart", style={"backgroundColor": colors['box4purple'], 'border': '1px solid', "padding-left": 5}),
+                html.H6("Chart 4: PM2.5 Concentration Heatmap", id = "plot4_title", style={"backgroundColor": colors['box4purple'], 'border': '1px solid', "padding-left": 5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -285,55 +295,60 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
 
 
 @app.callback(
-    dash.dependencies.Output('plot1', 'srcDoc'),
+    [dash.dependencies.Output('plot1', 'srcDoc'),
+    dash.dependencies.Output('plot1_title', 'children')],
     [dash.dependencies.Input('pollutant1', 'value'),
      dash.dependencies.Input('location1', 'value'),
      dash.dependencies.Input('daterange', 'value')])
 def update_plot1(pollutant1, location1, daterange):
 
-    print(daterange[0])
-    print(daterange[1])
-    type(daterange)
-   
-    updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange = daterange).to_html()
 
-    return updated_plot1
+    #pdated_plot = make_plot(xaxxis_column_name, yaxis_column_name)).to_html()
+    updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1, height = 220, width = 320).to_html()
+    updated_title1 = "Chart 1: PM" + str(pollutant1) +" concentration for BC Cities"
+    return updated_plot1, updated_title1
 
 
 @app.callback(
-    dash.dependencies.Output('plot2', 'srcDoc'),
-    [dash.dependencies.Input('location2', 'value'),
-     dash.dependencies.Input('daterange', 'value')])
+    [dash.dependencies.Output('plot2', 'srcDoc'),
+    dash.dependencies.Output('plot2_title', 'children')],
+    [dash.dependencies.Input('location2', 'value')])
 
 def update_plot2(location2, daterange):
 
-    updated_plot2 = Plotter.pm_linechart(location =location2, pms = [2.5, 10], height = 220, width = 400, daterange=daterange).to_html()
 
-    return updated_plot2
+    updated_plot2 = Plotter.pm_linechart(location =location2, pms = [2.5, 10], height = 220, width = 400, daterange=daterange).to_html()
+    updated_title2 = "Chart 2: Pollutant Concentration in " + str(location2) 
+    
+    return updated_plot2, updated_title2
+
 
 
 @app.callback(
-    dash.dependencies.Output('plot3', 'srcDoc'),
+    [dash.dependencies.Output('plot3', 'srcDoc'),
+    dash.dependencies.Output('plot3_title', 'children')],
     [dash.dependencies.Input('location3', 'value'),
      dash.dependencies.Input('pollutant3', 'value'),
      dash.dependencies.Input('daterange', 'value')])
 
 def update_plot3(location3, pollutant3, daterange):
-# # #    print(type(location3))
 
     updated_plot3 = Plotter.make_barchart(location3, pm = pollutant3, width = 350, height = 220, daterange=daterange).to_html()
-
-    return updated_plot3
+    updated_title3 = "Chart 3: Distribution of PM" + str(pollutant3) + " Concentration for BC Cities"
+    return updated_plot3, updated_title3
 
 @app.callback(
-    dash.dependencies.Output('plot4', 'srcDoc'),
-    [dash.dependencies.Input('pollutant4', 'value'),
-     dash.dependencies.Input('daterange', 'value')])
+    [dash.dependencies.Output('plot4', 'srcDoc'),
+    dash.dependencies.Output('plot4_title', 'children')],
+    [dash.dependencies.Input('pollutant4', 'value')])
 
 def update_plot4(pollutant4, daterange):
 
+
     updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 280, height = 220, daterange=daterange).to_html()
-    return updated_plot4
+    updated_title4 = "Chart 4: PM" + str(pollutant4) + " Concentration Heatmap"
+    return updated_plot4, updated_title4
+
 
 
 if __name__ == '__main__':

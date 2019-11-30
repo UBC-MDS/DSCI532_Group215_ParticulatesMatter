@@ -67,7 +67,7 @@ class PlotsCreator:
         """
         start_date = str(daterange[0])+'-01-01' 
         end_date = str(daterange[1])+'-01-01'
-        
+
         width = self.width if not width else width
         height = self.height if not height else height
 

@@ -34,11 +34,10 @@ server = app.server
 
 colors = {"white": "#ffffff",
           "light_grey": "#d2d7df",
-          "banner_blue": "#00ccff",
-          "box1blue": "#e6f5ff",
-          "box2green": "#e6ffe6",
-          "box3yellow": "#ffffcc",
-          "box4purple": "#eeccff",
+          "box1blue": "#8BBEE8FF ",
+          "box2green": "#A8D5BAFF",
+          "box3blue": "#8BBEE8FF",
+          "box4green": "#A8D5BAFF",
           "black": "#000000"
           }
 
@@ -50,11 +49,11 @@ colors = {"white": "#ffffff",
 # APP LAYOUT
 app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     # HEADER
-    html.Div(className="row", style={'backgroundColor': colors['banner_blue'], 'border': '1px solid', "padding-left": 5}, children=[
+    html.Div(className="row", style={'backgroundColor': colors['black'], 'border': '1px solid', "padding-left": 5}, children=[
         html.H3('Pollutants Matter BC – visualization of particulate matter concentrations (weighted monthly averages)',
-                style={'color':colors['black'], 'margin-top':2, 'margin-bottom':2}),
+                style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2}),
         html.H6('Data is attributed to the BC Ministry of Environment and Climate Change Strategy',
-                style={'color':colors['black'], 'margin-top':2, 'margin-bottom':2})
+                style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2})
     ]),
     
     
@@ -88,7 +87,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
                     multi = True,
-                    value='Vancouver'
+                    value='Abbotsford'
                 )    
                 
                 ]),
@@ -141,7 +140,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange=[2005,2010]).to_html()
+                    srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Abbotsford"],width=400, height = 250, daterange=[2005,2010]).to_html()
                     ################ The magic happens here
                     ),
             ])
@@ -178,7 +177,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className="two columns", style={'backgroundColor': colors['light_grey'], 'padding': 0}, children=[
 
             #BOX3 YELLOW
-            html.Div(className="row",  style={'backgroundColor': colors['box3yellow'], 
+            html.Div(className="row",  style={'backgroundColor': colors['box3blue'], 
                 'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':10, 'border': '1px solid'}, children=[
             html.P("Chart 3 controls:\nPollutant:\n"),
             
@@ -205,7 +204,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 )   ]),
 
             #BOX4 PURPLE
-            html.Div(className="row",  style={'backgroundColor': colors['box4purple'], 
+            html.Div(className="row",  style={'backgroundColor': colors['box4green'], 
                 'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':60, 'border': '1px solid'}, children=[
                 html.P("Chart 4 controls:\nPollutant:\n "),
                 
@@ -227,7 +226,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'margin-left':10, 'margin-right':10, "padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("Chart 3: Distribution of PM2.5 Concentrations for BC Cities", id = 'plot3_title', style={"backgroundColor": colors['box3yellow'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
+                html.H6("Chart 3: Distribution of PM2.5 Concentrations for BC Cities", id = 'plot3_title', style={"backgroundColor": colors['box3blue'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -250,7 +249,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0,"padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("Chart 4: PM2.5 Concentration Heatmap", id = "plot4_title", style={"backgroundColor": colors['box4purple'], 'border': '1px solid', "padding-left": 5}),
+                html.H6("Chart 4: PM2.5 Concentration Heatmap", id = "plot4_title", style={"backgroundColor": colors['box4green'], 'border': '1px solid', "padding-left": 5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -283,8 +282,11 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 step = None,
                 min=2000,
                 max=2017,
-                value=[2008, 2010]
-            )   ])
+                value=[2000, 2016]
+            )
+            ]),
+        html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank")   
+
 
     ])
 ])
@@ -301,7 +303,7 @@ def update_plot1(pollutant1, location1, daterange):
     # if type(location1) == str:
     #     location1 = [location1]
 
-    updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations= location1,width=400, height = 220, daterange = daterange).to_html()
+    updated_plot1 =  Plotter.location_linechart(pm = pollutant1, init_locations= location1, width=400, height = 220, daterange = daterange).to_html()
     updated_title1 = "Chart 1: PM" + str(pollutant1) + " Concentration for given locations"
 
     return updated_plot1, updated_title1

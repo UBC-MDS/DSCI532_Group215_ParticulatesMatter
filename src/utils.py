@@ -86,7 +86,7 @@ class PlotsCreator:
         return alt.Chart(temp_data).\
                     mark_bar(fillOpacity = 0.5).\
                     encode(
-                        x=alt.X('RAW_VALUE', bin=alt.Bin(step=0.5), title = 'Concentration()'),
+                        x=alt.X('RAW_VALUE', bin=alt.Bin(step=0.5), title = 'Pollutant concentration (µg/m3)'),
                         y = alt.Y('count()',
                                   stack = None,
                                   title = 'Frequency'),
@@ -159,12 +159,12 @@ class PlotsCreator:
                             frame=[-2, 2],
                             groupby = ['PARAMETER']
                         ).encode(
-                            x=alt.X('index:T', title = 'date'),
+                            x=alt.X('index:T', title = 'Date'),
                             y=alt.Y('rolling_mean:Q',
-                                title = 'Concentration()',
+                                title = 'Pollutant concentration (µg/m3)',
                                 impute=alt.ImputeParams(value=None, keyvals=list(keyvals))
                             ),
-                            color= alt.Color('PARAMETER'),
+                            color= alt.Color('PARAMETER', title='Pollutant'),
                             tooltip = [alt.Tooltip('index:T', title = 'Date:'),
                                        alt.Tooltip('RAW_VALUE:N', title = 'Pollution')]
                         ).properties(
@@ -190,9 +190,9 @@ class PlotsCreator:
                             frame=[-2, 2],
                             groupby = ['PARAMETER']
                         ).encode(
-                            x=alt.X('index:T', title = 'date'),
+                            x=alt.X('index:T', title = 'Date'),
                             y=alt.Y('rolling_mean:Q',
-                                title = 'Concentration()',
+                                title = 'Pollutant concentration (µg/m3)',
                                 impute=alt.ImputeParams(value=None, keyvals=list(keyvals))
                             ),
                             detail = alt.Color('PARAMETER'),
@@ -275,12 +275,12 @@ class PlotsCreator:
                             frame=[-2, 2],
                             groupby = ['PARAMETER']
                         ).encode(
-                            x=alt.X('index:T', title = 'date'),
-                            y=alt.Y('rolling_mean:Q', title = 'Concentration',
+                            x=alt.X('index:T', title = 'Date'),
+                            y=alt.Y('rolling_mean:Q', title = 'Pollutant concentration (µg/m3)',
                                    impute=alt.ImputeParams(value=None, keyvals=list(keyvals))),
-                            color = alt.condition(brush, 'STATION_NAME', if_false=alt.value('lightgray')),
+                            color = alt.condition(brush, 'STATION_NAME', title='Locations', if_false=alt.value('lightgray')),
                             tooltip = [alt.Tooltip('index:T', title = 'Date:'),
-                                alt.Tooltip('RAW_VALUE:N', title = 'Polution'),
+                                alt.Tooltip('RAW_VALUE:N', title = 'Pollutant concentration (µg/m3)'),
                                 alt.Tooltip('STATION_NAME:N', title = 'Location')]
                         ).transform_filter(
                             brush
@@ -307,12 +307,12 @@ class PlotsCreator:
                         groupby = ['PARAMETER']
                     ).\
                     encode(
-                        x=alt.X('index:T', title = 'date'),
-                        y=alt.Y('rolling_mean:Q', title = 'Concentration',
+                        x=alt.X('index:T', title = 'Date'),
+                        y=alt.Y('rolling_mean:Q', title = 'Pollutant concentration (µg/m3)',
                                impute=alt.ImputeParams(value=None, keyvals=list(keyvals))),
                         color= alt.value('lightgray'),
                         tooltip = [alt.Tooltip('index:T', title = 'Date:'),
-                                    alt.Tooltip('RAW_VALUE:N', title = 'Polution'),
+                                    alt.Tooltip('RAW_VALUE:N', title = 'Pollutant concentration (µg/m3)'),
                                     alt.Tooltip('STATION_NAME:N', title = 'Location')]).\
                     properties(
                         width=width,
@@ -364,14 +364,14 @@ class PlotsCreator:
 
         temp_data['index'] = pd.to_datetime(temp_data['index'])
 
-        base_chart = alt.Chart(temp_data, title = f'Concentration of PM{pm} in BC').\
+        base_chart = alt.Chart(temp_data).\
                     mark_rect().\
                     encode(
-                        x=alt.X('index:O', title = 'date', axis = alt.Axis(labels=False, ticks=False)),
+                        x=alt.X('index:O', title = 'Date', axis = alt.Axis(labels=False, ticks=False)),
                         y=alt.Y('STATION_NAME:N', title = 'Location',  axis=alt.Axis(labels=False, ticks=False)),
-                        color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title=f"")),
+                        color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title='µg/m3')),
                         tooltip = [alt.Tooltip('index:O', title = 'Date:'),
-                                    alt.Tooltip('RAW_VALUE:N', title = 'Pollution'),
+                                    alt.Tooltip('RAW_VALUE:N', title = 'Pollutant oncentration(µg/m3)'),
                                     alt.Tooltip('STATION_NAME:O', title = 'Location')]).\
                     properties(
                         width = width,

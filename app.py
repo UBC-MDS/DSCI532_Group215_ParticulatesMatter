@@ -136,7 +136,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],height = 250, daterange=[2005,2010]).to_html()
+                    srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange=[2005,2010]).to_html()
 
                    
                     ################ The magic happens here
@@ -295,7 +295,7 @@ def update_plot1(pollutant1, location1, daterange):
     print(daterange[1])
     type(daterange)
    
-    updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],height = 250, daterange = daterange).to_html()
+    updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange = daterange).to_html()
 
     return updated_plot1
 

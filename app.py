@@ -19,8 +19,9 @@ alt.data_transformers.disable_max_rows()
 
 
 pm_df = pd.read_csv('data/processed_data.csv')
+avg_df = pd.read_csv('data/processed_baseline_data.csv')
 
-Plotter = utils.PlotsCreator(pm_df)
+Plotter = utils.PlotsCreator(pm_df, avg_df)
 
 ########################################### 
 # APP LAYOUT
@@ -140,11 +141,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-
                     srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange=[2005,2010]).to_html()
-
-                   
-
                     ################ The magic happens here
                     ),
             ])
@@ -166,9 +163,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-
                     srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
-
                     ################ The magic happens here
                     )
                 ])
@@ -302,6 +297,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
      dash.dependencies.Input('daterange', 'value')])
 def update_plot1(pollutant1, location1, daterange):
 
+    if type(location1) == str:
+        location1 = [location1]
 
     #pdated_plot = make_plot(xaxxis_column_name, yaxis_column_name)).to_html()
     updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1, height = 220, width = 320).to_html()

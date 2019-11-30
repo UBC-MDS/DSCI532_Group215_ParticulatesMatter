@@ -367,11 +367,11 @@ class PlotsCreator:
         base_chart = alt.Chart(temp_data, title = f'Concentration of PM{pm} in BC').\
                     mark_rect().\
                     encode(
-                        x=alt.X('index:O', title = 'date', ),
-                        y=alt.Y('STATION_NAME:N', title = ''),
-                        color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title=f"Concentration of PM{pm}()")),
+                        x=alt.X('index:O', title = 'date', axis = alt.Axis(labels=False, ticks=False)),
+                        y=alt.Y('STATION_NAME:N', title = 'Location',  axis=alt.Axis(labels=False, ticks=False)),
+                        color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title=f"")),
                         tooltip = [alt.Tooltip('index:O', title = 'Date:'),
-                                    alt.Tooltip('RAW_VALUE:N', title = 'Polution'),
+                                    alt.Tooltip('RAW_VALUE:N', title = 'Pollution'),
                                     alt.Tooltip('STATION_NAME:O', title = 'Location')]).\
                     properties(
                         width = width,
@@ -388,7 +388,7 @@ class PlotsCreator:
                 x =alt.X('val:O', title = 'filter', axis = None)
             )
 
-            return base_chart + rule
+            return (base_chart + rule)
 
         return base_chart
 

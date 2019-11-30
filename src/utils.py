@@ -37,7 +37,7 @@ class PlotsCreator:
         self.width = widths
         self.height = heights
 
-    def make_barchart(self, locations, pm = 2.5, width = None, height = None, start_date = None, end_date = None):
+    def make_barchart(self, locations, pm = 2.5, width = None, height = None, daterange=[2000,2017]):
         """
         Plots Barchart with given locations and pm
 
@@ -65,7 +65,9 @@ class PlotsCreator:
                             pm = 10)
 
         """
-
+        start_date = str(daterange[0])+'-01-01' 
+        end_date = str(daterange[1])+'-01-01'
+        
         width = self.width if not width else width
         height = self.height if not height else height
 
@@ -95,7 +97,7 @@ class PlotsCreator:
                         height = height
                     )
 
-    def pm_linechart(self, location, pms = [2.5, 10], width = None, height = None, start_date=None, end_date=None):
+    def pm_linechart(self, location, pms = [2.5, 10], width = None, height = None, daterange=[2000,2017]):
         """
         Plots linechart with up to two PMs and one location.
 
@@ -123,6 +125,9 @@ class PlotsCreator:
                                 end_date = '2008-01-01')
 
         """
+
+        start_date = str(daterange[0])+'-01-01' 
+        end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
         height = self.height if not height else height
@@ -203,7 +208,7 @@ class PlotsCreator:
 
 
 
-    def location_linechart(self, pm = 2.5, init_locations=[], width = None, height = None, start_date=None, end_date=None):
+    def location_linechart(self, pm = 2.5, init_locations=[], width = None, height = None, daterange =[2000,2017]):
         """
         Plots linechart with one PM and multiple locations.
 
@@ -235,6 +240,8 @@ class PlotsCreator:
                                 end_date = '2008-01-01')
 
         """
+        start_date = str(daterange[0])+'-01-01' 
+        end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
         height = self.height if not height else height
@@ -315,7 +322,7 @@ class PlotsCreator:
         return line_highlight
 
 
-    def make_heatmap(self, pm = 2.5, width = None, height = None, start_date = None, end_date = None):
+    def make_heatmap(self, pm = 2.5, width = None, height = None, daterange=[2000,2017]):
         """
         Plots heatmap with all locations and given pm
 
@@ -344,6 +351,8 @@ class PlotsCreator:
 
         """
 
+        start_date = str(daterange[0])+'-01-01' 
+        end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
         height = self.height if not height else height

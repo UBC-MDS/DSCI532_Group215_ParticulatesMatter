@@ -301,7 +301,7 @@ def update_plot1(pollutant1, location1, daterange):
     # if type(location1) == str:
     #     location1 = [location1]
 
-    updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 220, daterange = daterange).to_html()
+    updated_plot1 =  Plotter.location_linechart(pm = 2.5, init_locations= location1,width=400, height = 220, daterange = daterange).to_html()
     updated_title1 = "Chart 1: PM" + str(pollutant1) + " Concentration for given locations"
 
     return updated_plot1, updated_title1

@@ -96,7 +96,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
             #BOX2 GREEN
             html.Div(className="row",  style={'backgroundColor': colors['box2green'], 
                 'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':100, 'border': '1px solid'}, children=[
-            # html.P("Chart 2 controls:\nPollutant:\n"),
+            html.P("Chart 2 controls:"),
             
             # dcc.Dropdown(
             #         options=[
@@ -262,7 +262,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     ################ The magic happens here
                     srcDoc = Plotter.make_heatmap(pm = 2.5, width = 340, height = 250, daterange=[2000,2017]).to_html()
                     ################ The magic happens here
-                    )
+                    ),
+                    html.P("Hover over heatmap for location and time information")
                 ])
             
         ])

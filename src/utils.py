@@ -81,7 +81,7 @@ class PlotsCreator:
 
 
 
-        return alt.Chart(temp_data, title = f'Distribution of concentration of PM{pm} in given locations').\
+        return alt.Chart(temp_data).\
                     mark_bar(fillOpacity = 0.5).\
                     encode(
                         x=alt.X('RAW_VALUE', bin=alt.Bin(step=0.5), title = 'Concentration()'),
@@ -163,7 +163,6 @@ class PlotsCreator:
                             tooltip = [alt.Tooltip('index:T', title = 'Date:'),
                                        alt.Tooltip('RAW_VALUE:N', title = 'Pollution')]
                         ).properties(
-                            title=f'Concentration of selected PMs in {location}',
                             width=width,
                             height=height
                         )
@@ -196,7 +195,6 @@ class PlotsCreator:
                             tooltip = [alt.Tooltip('index:T', title = 'Date:'),
                                        alt.Tooltip('RAW_VALUE:N', title = 'Pollution')]
                         ).properties(
-                            title=f'Concentration of selected PMs in {location}',
                             width=width,
                             height=height
                         ) + base_plot
@@ -294,7 +292,7 @@ class PlotsCreator:
 
 
 
-            return alt.Chart(avg_data, title = f'Concentration of PM{pm} in given locations').\
+            return alt.Chart(avg_data).\
                     mark_line(width = 10, point=True).\
                     transform_window(
                         rolling_mean='mean(RAW_VALUE)',

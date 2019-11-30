@@ -33,11 +33,11 @@ server = app.server
 
 colors = {"white": "#ffffff",
           "light_grey": "#d2d7df",
-          "banner_blue": "#00ccff",
-          "box1blue": "#e6f5ff",
-          "box2green": "#e6ffe6",
-          "box3yellow": "#ffffcc",
-          "box4purple": "#eeccff",
+          "banner_blue": "#D7A9E3FF ",
+          "box1blue": "#8BBEE8FF ",
+          "box2green": "#A8D5BAFF",
+          "box3yellow": "#DCEDC2",
+          "box4purple": "#A8E6CE",
           "black": "#000000"
           }
 

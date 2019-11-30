@@ -285,7 +285,8 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 value=[2000, 2016]
             )
             ]),
-        html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank")   
+        html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),
+        html.P("Data is limited to the stations where measurements were taken and therefore does not account for the entirety of BC")  
 
 
     ])

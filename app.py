@@ -46,7 +46,9 @@ colors = {"white": "#ffffff",
 app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     # HEADER
     html.Div(className="row", style={'backgroundColor': colors['banner_blue'], 'border': '1px solid', "padding-left": 5}, children=[
-        html.H3('Pollutants Matter BC – visualization of particulate matter concentrations',
+        html.H3('Pollutants Matter BC – visualization of particulate matter concentrations (weighted monthly averages)',
+                style={'color':colors['black'], 'margin-top':2, 'margin-bottom':2}),
+        html.H6('Data is attributed to the BC Ministry of Environment and Climate Change Strategy',
                 style={'color':colors['black'], 'margin-top':2, 'margin-bottom':2})
     ]),
     
@@ -125,7 +127,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'margin-left':10, 'margin-right':10, "padding": 0}, children=[
             
             html.Div(className="row", children=[
-                html.H6("Concentration of PM2.5 for given locations"  , id = 'plot1_title', style={"backgroundColor": colors['box1blue'], 'border': '1px solid', 'text-align': 'center', 'padding-left':5}),
+                html.H6("Chart 1: Concentration of PM2.5 for given locations"  , id = 'plot1_title', style={"backgroundColor": colors['box1blue'], 'border': '1px solid', 'text-align': 'center', 'padding-left':5}),
                 html.Iframe(
                     sandbox='allow-scripts',
                     id='plot1',
@@ -134,7 +136,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver Kitsilano"],height = 250).to_html()
+                    srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],height = 250).to_html()
                     ################ The magic happens here
                     ),
             ])
@@ -146,7 +148,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0, "padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("Pollutant Concentration in Abbotsford", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
+                html.H6("Chart 2: Pollutant Concentration in Abbotsford", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -156,7 +158,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= Plotter.pm_linechart("Vancouver Kitsilano", pms = [2.5, 10], height = 250, width = 300).to_html()
+                    srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300).to_html()
                     ################ The magic happens here
                     )
                 ])
@@ -220,7 +222,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'margin-left':10, 'margin-right':10, "padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("Distribution of PM2.5 Concentrations for BC Cities", id = 'plot3_title', style={"backgroundColor": colors['box3yellow'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
+                html.H6("Chart 3: Distribution of PM2.5 Concentrations for BC Cities", id = 'plot3_title', style={"backgroundColor": colors['box3yellow'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -243,7 +245,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
         html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0,"padding": 0}, children=[
             
             html.Div(className="row",  children=[
-                html.H6("PM2.5 Concentration Heatmap", id = "plot4_title", style={"backgroundColor": colors['box4purple'], 'border': '1px solid', "padding-left": 5}),
+                html.H6("Chart 4: PM2.5 Concentration Heatmap", id = "plot4_title", style={"backgroundColor": colors['box4purple'], 'border': '1px solid', "padding-left": 5}),
 
                 html.Iframe(
                     sandbox='allow-scripts',
@@ -289,7 +291,7 @@ def update_plot1(pollutant1, location1):
 
     #pdated_plot = make_plot(xaxxis_column_name, yaxis_column_name)).to_html()
     updated_plot1 = Plotter.location_linechart(pm = pollutant1, init_locations= location1, height = 220, width = 320).to_html()
-    updated_title1 = "PM" + str(pollutant1) +" concentration for BC Cities"
+    updated_title1 = "Chart 1: PM" + str(pollutant1) +" concentration for BC Cities"
     return updated_plot1, updated_title1
 
 
@@ -301,7 +303,7 @@ def update_plot1(pollutant1, location1):
 def update_plot2(location2):
 
     updated_plot2 = Plotter.pm_linechart(location2, pms = [2.5, 10], height = 220, width = 400).to_html()
-    updated_title2 = "Pollutant Concentration in " + str(location2)
+    updated_title2 = "Chart 2: Pollutant Concentration in " + str(location2)
     return updated_plot2, updated_title2
 
 
@@ -315,7 +317,7 @@ def update_plot3(location3, pollutant3):
 # # #    print(type(location3))
 
     updated_plot3 = Plotter.make_barchart(location3, pm = pollutant3, width = 350, height = 220).to_html()
-    updated_title3 = "Distribution of PM" + str(pollutant3) + " Concentration for BC Cities"
+    updated_title3 = "Chart 3: Distribution of PM" + str(pollutant3) + " Concentration for BC Cities"
     return updated_plot3, updated_title3
 
 @app.callback(
@@ -326,7 +328,7 @@ def update_plot3(location3, pollutant3):
 def update_plot4(pollutant4=2.5):
 
     updated_plot4 = Plotter.make_heatmap(pm = pollutant4, width = 280, height = 220).to_html()
-    updated_title4 = "PM" + str(pollutant4) + " Concentration Heatmap"
+    updated_title4 = "Chart 4: PM" + str(pollutant4) + " Concentration Heatmap"
     return updated_plot4, updated_title4
 
 

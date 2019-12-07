@@ -234,7 +234,8 @@ html.Div(className="row", children=[
                 srcDoc = Plotter.make_heatmap(pm = 2.5, width = 340, height = 250, daterange=[2000,2017]).to_html()
                 ################ The magic happens here
                 ),
-                html.P("Hover over heatmap for location and date information")
+                html.P("Hover over heatmap for location and date information"),
+                html.P("Red lines show the time period subset presented in other charts")
             ])
 
     ])

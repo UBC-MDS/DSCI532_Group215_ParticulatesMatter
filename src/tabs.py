@@ -99,6 +99,7 @@ def get_joint_view(Plotter, colors, pm_df, avg_df):
                         srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 250, daterange=[2005,2010]).to_html()
                         ################ The magic happens here
                         ),
+                        html.P("The grey lines represent the provincial averages of the selected pollutant")
                 ])
             ]),
 
@@ -186,7 +187,8 @@ def get_joint_view(Plotter, colors, pm_df, avg_df):
                         ################ The magic happens here
                         srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
                         ################ The magic happens here
-                        )
+                        ),
+                        html.P("The grey lines represent the provincial averages for each pollutant")
                     ])
 
             ]),
@@ -211,7 +213,8 @@ def get_joint_view(Plotter, colors, pm_df, avg_df):
                         srcDoc = Plotter.make_heatmap(pm = 2.5, width = 340, height = 250, daterange=[2000,2017]).to_html()
                         ################ The magic happens here
                         ),
-                        html.P("Hover over heatmap for location and date information")
+                        html.P("Hover over heatmap for location and date information"),
+                        html.P("Red lines show the date period selected in the other charts")
                     ])
 
             ])

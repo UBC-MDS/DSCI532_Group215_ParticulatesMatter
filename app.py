@@ -50,7 +50,6 @@ html.Div(className="row", children=[
     # SIDEBAR
     html.Div(className="two columns", style={'backgroundColor': colors['light_grey'], 'padding': 0}, children=[
 
-
         #BOX1 BLUE
         html.Div(className="row",  style={'backgroundColor': colors['box1blue'],
             'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':200,'border': '1px solid'}, children=[
@@ -87,7 +86,6 @@ html.Div(className="row", children=[
                ]),
 
       
-  
 
 
     ###########################################
@@ -113,7 +111,6 @@ html.Div(className="row", children=[
                 ),
         ])
     ]),
-
 
     ###########################################
     # CHART 2
@@ -171,6 +168,7 @@ html.Div(className="row", children=[
                 clearable = False
             )]),
 
+
         #BOX4 PURPLE
         html.Div(className="row",  style={'backgroundColor': colors['box4purp'],
             'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':120, 'border': '1px solid'}, children=[
@@ -205,7 +203,7 @@ html.Div(className="row", children=[
 
                 ################ The magic happens here
                 srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
-                # 
+    
                 ################ The magic happens here
 
                 )
@@ -243,7 +241,6 @@ html.Div(className="row", children=[
 
 
 
-
 # BOX 5
 html.Div(className="row", children=[
 
@@ -258,7 +255,6 @@ html.Div(className="row", children=[
             max=2017,
             value=[2000, 2017]
         )
-
         ]),
     html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),
     html.P("Data is limited to the stations where measurements were taken and therefore does not account for the entirety of BC")
@@ -294,14 +290,22 @@ heatmap_view_div = [html.Div(style={"backgroundColor": colors['white'], 'text-al
                                         include_red_lines=False, include_y_labels = True).to_html()
             ################ The magic happens here
             ),
-            html.P("Hover over heatmap for location and date information")
+            html.P("Hover over heatmap for location and date information"),
+            html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),
+            html.P("Data is limited to the stations where measurements were taken and therefore does not account for the entirety of BC")
 
 ])]
 
 # def chart1_wrapper(pollutant1,location1, daterange):
 #     return Plotter.location_linechart(pm = pollutant1, init_locations= location1,height = 220, width = 320,
 #                                                 start_date = str(daterange[0])+'-01-01', end_date= str(daterange[1])+'-01-01').to_html()
-
+# app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
+#     # HEADER
+#     html.Div(className="row", style={'backgroundColor': colors['black'], 'border': '1px solid', "padding-left": 5}, children=[
+#         html.H3('Pollutants Matter BC – Visualization of Particulate Matter Concentrations',
+#                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2}),
+#         html.P('This application tracks weighted monthly averages for pollution data collected from different stations across British Columbia. The measured pollutants, PM2.5 and PM10, refer to atmospheric particulate matter (PM) that have a diameter of less than 2.5 and 10 micrometers, respectively.',
+#                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2})
 # APP LAYOUT
 app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     # HEADER
@@ -312,11 +316,10 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2})
     ]),
 
-
     # TAB
     dcc.Tabs(id="tabss", value='general_tab', children=[
         dcc.Tab(label='Joint View', value='general_tab'),
-        dcc.Tab(label='Heatmap', value='heatmap_tab'),
+        dcc.Tab(label='Enlarged Heatmap', value='heatmap_tab'),
     ]),
 
     html.Div(id='tabs-content')

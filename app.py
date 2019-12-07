@@ -50,6 +50,7 @@ html.Div(className="row", children=[
     # SIDEBAR
     html.Div(className="two columns", style={'backgroundColor': colors['light_grey'], 'padding': 0}, children=[
 
+
         #BOX1 BLUE
         html.Div(className="row",  style={'backgroundColor': colors['box1blue'],
             'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':10,'border': '1px solid'}, children=[
@@ -74,7 +75,7 @@ html.Div(className="row", children=[
                     {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                 ],
                 multi = True,
-                value='Abbotsford'
+                value='Vancouver'
             )
 
             ]),
@@ -99,13 +100,15 @@ html.Div(className="row", children=[
                 options=[
                     {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                 ],
-                value=pm_df['STATION_NAME'].unique()[0],
+                value="Vancouver",
                 clearable = False
             )
 
 
 
                ])
+
+      
     ]),
 
 
@@ -133,13 +136,14 @@ html.Div(className="row", children=[
         ])
     ]),
 
+
     ###########################################
     # CHART 2
     ###########################################
     html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0, "padding": 0}, children=[
 
         html.Div(className="row",  children=[
-            html.H6("Chart 2: Pollutant Concentration in Abbotsford", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
+            html.H6("Chart 2: Pollutant Concentration in Vancouver", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
 
             html.Iframe(
                 sandbox='allow-scripts',
@@ -151,6 +155,7 @@ html.Div(className="row", children=[
                 ################ The magic happens here
                 srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
                 ################ The magic happens here
+
                 )
             ])
 
@@ -257,20 +262,22 @@ html.Div(className="row", children=[
 
 
 
+
 # BOX 5
 html.Div(className="row", children=[
 
     #BOX5 DATE CONTROLLER
-    html.Div(className="row",  style={'backgroundColor': colors['light_grey'], 'padding-bottom':30, 'padding-left':10,  'border': '1px solid'}, children=[
+    html.Div(className="row",  style={'backgroundColor': colors['light_grey'], 'padding-bottom':30, 'padding-left':20,'padding-right':20,  'border': '1px solid'}, children=[
         html.P("Date control slider", style={'padding-top':0}),
         dcc.RangeSlider(
             id = 'daterange',
-            marks={i: '{}'.format(i) for i in range(2000, 2017)},
+            marks={i: '{}'.format(i) for i in range(2000, 2018)},
             step = None,
             min=2000,
             max=2017,
-            value=[2000, 2016]
+            value=[2000, 2017]
         )
+
         ]),
     html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),
     html.P("Data is limited to the stations where measurements were taken and therefore does not account for the entirety of BC")
@@ -318,11 +325,12 @@ heatmap_view_div = [html.Div(style={"backgroundColor": colors['white'], 'text-al
 app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     # HEADER
     html.Div(className="row", style={'backgroundColor': colors['black'], 'border': '1px solid', "padding-left": 5}, children=[
-        html.H3('Pollutants Matter BC – visualization of particulate matter concentrations (weighted monthly averages)',
+        html.H3('Pollutants Matter BC – Visualization of Particulate Matter Concentrations',
                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2}),
-        html.H6('Data is attributed to the BC Ministry of Environment and Climate Change Strategy',
+        html.P('This application tracks weighted monthly averages for pollution data collected from different stations across British Columbia. The measured pollutants, PM2.5 and PM10, refer to atmospheric particulate matter (PM) that have a diameter of less than 2.5 and 10 micrometers, respectively.',
                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2})
     ]),
+
 
     # TAB
     dcc.Tabs(id="tabss", value='general_tab', children=[

@@ -274,15 +274,15 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     html.Div(className="row", children=[
 
         #BOX5 DATE CONTROLLER
-        html.Div(className="row",  style={'backgroundColor': colors['light_grey'], 'padding-bottom':30, 'padding-left':10,  'border': '1px solid'}, children=[
+        html.Div(className="row",  style={'backgroundColor': colors['light_grey'], 'padding-bottom':30, 'padding-left':20, 'padding-right': 20,  'border': '1px solid'}, children=[
             html.P("Date control slider", style={'padding-top':0}),
             dcc.RangeSlider(
                 id = 'daterange',
-                marks={i: '{}'.format(i) for i in range(2000, 2017)},
+                marks={i: '{}'.format(i) for i in range(2000, 2018)},
                 step = None,
                 min=2000,
                 max=2017,
-                value=[2000, 2016]
+                value=[2000, 2017]
             )
             ]),
         html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),

@@ -65,7 +65,7 @@ class PlotsCreator:
                             pm = 10)
 
         """
-        start_date = str(daterange[0])+'-01-01' 
+        start_date = str(daterange[0])+'-01-01'
         end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
@@ -126,7 +126,7 @@ class PlotsCreator:
 
         """
 
-        start_date = str(daterange[0])+'-01-01' 
+        start_date = str(daterange[0])+'-01-01'
         end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
@@ -240,7 +240,7 @@ class PlotsCreator:
                                 end_date = '2008-01-01')
 
         """
-        start_date = str(daterange[0])+'-01-01' 
+        start_date = str(daterange[0])+'-01-01'
         end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
@@ -322,7 +322,9 @@ class PlotsCreator:
         return line_highlight
 
 
-    def make_heatmap(self, pm = 2.5, width = None, height = None, daterange=[2000,2017]):
+    def make_heatmap(self, pm = 2.5, width = None, height = None,
+                            daterange=[2000,2017], include_y_labels = False,
+                            title_text = ''):
         """
         Plots heatmap with all locations and given pm
 
@@ -335,8 +337,10 @@ class PlotsCreator:
                     over the global class value. Default = None
             height (int): Height of the plot. If provided, it will be preferred
                     over the global class value. Default = None
-            start_date : The start date to highlight in red when plotting
-            end_date : The end date to highlight in red when plotting
+            datarange (arr of ints): The start  and end date to highlight in
+                                    red when plotting
+            include_y_labels (Boolean): Include y labels or not. Default = False
+            title_text (str): Title of the map to display. Default = ''
 
         Note: The type of the start_date and end_date should be the same as the
                 'index' column of the data provided
@@ -351,7 +355,7 @@ class PlotsCreator:
 
         """
 
-        start_date = str(daterange[0])+'-01-01' 
+        start_date = str(daterange[0])+'-01-01'
         end_date = str(daterange[1])+'-01-01'
 
         width = self.width if not width else width
@@ -364,11 +368,13 @@ class PlotsCreator:
 
         temp_data['index'] = pd.to_datetime(temp_data['index'])
 
-        base_chart = alt.Chart(temp_data).\
+        base_chart = alt.Chart(temp_data,
+                        title = title_text).\
                     mark_rect().\
                     encode(
                         x=alt.X('index:O', title = 'Date', axis = alt.Axis(labels=False, ticks=False)),
-                        y=alt.Y('STATION_NAME:N', title = 'Location',  axis=alt.Axis(labels=False, ticks=False)),
+                        y=alt.Y('STATION_NAME:N', title = 'Location',
+                                    axis=alt.Axis(labels=include_y_labels, ticks=include_y_labels)),
                         color= alt.Color('RAW_VALUE:Q', legend=alt.Legend(title='µg/m3')),
                         tooltip = [alt.Tooltip('index:O', title = 'Date:'),
                                     alt.Tooltip('RAW_VALUE:N', title = 'Pollutant oncentration(µg/m3)'),
@@ -391,5 +397,3 @@ class PlotsCreator:
             return (base_chart + rule)
 
         return base_chart
-
-

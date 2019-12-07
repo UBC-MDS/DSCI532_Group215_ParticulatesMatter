@@ -38,7 +38,7 @@ colors = {"white": "#ffffff",
           "box1blue": "#8BBEE8FF ",
           "box2green": "#A8D5BAFF",
           "box3blue": "#8BBEE8FF",
-          "box4green": "#A8D5BAFF",
+          "box4purp": "#ccccff",
           "black": "#000000"
           }
 
@@ -53,8 +53,8 @@ html.Div(className="row", children=[
 
         #BOX1 BLUE
         html.Div(className="row",  style={'backgroundColor': colors['box1blue'],
-            'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':10,'border': '1px solid'}, children=[
-            html.P("Chart 1 controls:\nPollutant:\n"),
+            'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':200,'border': '1px solid'}, children=[
+            html.P("Charts 1 & 2 controls:\nPollutant:\n"),
 
             dcc.Dropdown(
                 id = 'pollutant1',
@@ -78,38 +78,16 @@ html.Div(className="row", children=[
                 value='Vancouver'
             )
 
-            ]),
+            ])
 
-        #BOX2 GREEN
-        html.Div(className="row",  style={'backgroundColor': colors['box2green'],
-            'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':100, 'border': '1px solid'}, children=[
-        html.P("Chart 2 controls:"),
-
-        # dcc.Dropdown(
-        #         options=[
-        #             {'label': 'PM2.5', 'value': 'PM2.5'},
-        #             {'label': 'PM10', 'value': 'PM10'}
-        #         ],
-        #         value='MTL'
-        #     ),
-
-            html.P("Location:\n", style={'padding-top':5}),
-
-            dcc.Dropdown(
-                id = 'location2',
-                options=[
-                    {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
-                ],
-                value="Vancouver",
-                clearable = False
-            )
+        
 
 
 
-               ])
+               ]),
 
       
-    ]),
+  
 
 
     ###########################################
@@ -130,7 +108,7 @@ html.Div(className="row", children=[
                 style={'border-width': '0'},
 
                 ################ The magic happens here
-                srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Abbotsford"],width=400, height = 250, daterange=[2005,2010]).to_html()
+                srcDoc= Plotter.location_linechart(pm = 2.5, init_locations=["Vancouver"],width=400, height = 220, daterange=[2005,2010]).to_html()
                 ################ The magic happens here
                 ),
         ])
@@ -143,24 +121,25 @@ html.Div(className="row", children=[
     html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0, "padding": 0}, children=[
 
         html.Div(className="row",  children=[
-            html.H6("Chart 2: Pollutant Concentration in Vancouver", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
+            
+            html.H6("Chart 3: Distribution of PM2.5 Concentrations for BC Cities", id = 'plot3_title', style={"backgroundColor": colors['box3blue'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
 
             html.Iframe(
                 sandbox='allow-scripts',
-                id='plot2',
-                height='290',
+                id='plot3',
+                height='300',
                 width='550',
                 style={'border-width': '0'},
 
                 ################ The magic happens here
-                srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
+                srcDoc= Plotter.make_barchart(["Abbotsford"], pm = 2.5, width = 400, height = 220, daterange=[2000,2017]).to_html()
+                # srcDoc= Plotter.make_barchart(["Abbotsford"], pm = 2.5, width = None, height = 250, daterange=[2000,2017]).to_html()
                 ################ The magic happens here
-
                 )
             ])
 
     ])
-]),
+  ]),
 
 # BOXES 3 & 4 AND CHARTS 3 & 4
 html.Div(className="row", children=[
@@ -168,36 +147,33 @@ html.Div(className="row", children=[
     # SIDEBAR
     html.Div(className="two columns", style={'backgroundColor': colors['light_grey'], 'padding': 0}, children=[
 
-        #BOX3 YELLOW
-        html.Div(className="row",  style={'backgroundColor': colors['box3blue'],
-            'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':10, 'border': '1px solid'}, children=[
-        html.P("Chart 3 controls:\nPollutant:\n"),
+       #BOX2 GREEN
+        html.Div(className="row",  style={'backgroundColor': colors['box2green'],
+            'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':80, 'border': '1px solid'}, children=[
+        html.P("Chart 3 controls:"),
 
-
-        dcc.Dropdown(
-                id = 'pollutant3',
-                options=[
-                    {'label': 'PM2.5', 'value': 2.5},
-                    {'label': 'PM10', 'value': 10}
-                ],
-                value = 2.5,
-                clearable = False
-            ),
+        # dcc.Dropdown(
+        #         options=[
+        #             {'label': 'PM2.5', 'value': 'PM2.5'},
+        #             {'label': 'PM10', 'value': 'PM10'}
+        #         ],
+        #         value='MTL'
+        #     ),
 
             html.P("Location:\n", style={'padding-top':5}),
 
             dcc.Dropdown(
-                id = 'location3',
+                id = 'location2',
                 options=[
                     {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                 ],
-                multi=True,
-                value = list(pm_df['STATION_NAME'].unique()[0:2])
-            )   ]),
+                value="Vancouver",
+                clearable = False
+            )]),
 
         #BOX4 PURPLE
-        html.Div(className="row",  style={'backgroundColor': colors['box4green'],
-            'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':60, 'border': '1px solid'}, children=[
+        html.Div(className="row",  style={'backgroundColor': colors['box4purp'],
+            'padding-left': 10, 'padding-right':10, 'padding-top':2, 'padding-bottom':120, 'border': '1px solid'}, children=[
             html.P("Chart 4 controls:\nPollutant:\n "),
 
             dcc.Dropdown(
@@ -218,20 +194,24 @@ html.Div(className="row", children=[
     html.Div(className='five columns', style={"backgroundColor": colors['white'], 'margin-left':10, 'margin-right':10, "padding": 0}, children=[
 
         html.Div(className="row",  children=[
-            html.H6("Chart 3: Distribution of PM2.5 Concentrations for BC Cities", id = 'plot3_title', style={"backgroundColor": colors['box3blue'], 'border': '1px solid', 'text-align': 'center',"padding-left": 5}),
+            html.H6("Chart 3: Pollutant Concentration in Vancouver", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
 
             html.Iframe(
                 sandbox='allow-scripts',
-                id='plot3',
-                height='300',
+                id='plot2',
+                height='290',
                 width='550',
                 style={'border-width': '0'},
 
                 ################ The magic happens here
-                srcDoc= Plotter.make_barchart(["Abbotsford"], pm = 2.5, width = None, height = 250, daterange=[2000,2017]).to_html()
+                srcDoc= Plotter.pm_linechart("Vancouver", pms = [2.5, 10], height = 250, width = 300, daterange=[2000,2017]).to_html()
+                # 
                 ################ The magic happens here
+
                 )
             ])
+        
+        
 
     ]),
 
@@ -241,7 +221,7 @@ html.Div(className="row", children=[
     html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0,"padding": 0}, children=[
 
         html.Div(className="row",  children=[
-            html.H6("Chart 4: PM2.5 Concentration Heatmap", id = "plot4_title", style={"backgroundColor": colors['box4green'], 'border': '1px solid', "padding-left": 5}),
+            html.H6("Chart 4: PM2.5 Concentration Heatmap", id = "plot4_title", style={"backgroundColor": colors['box4purp'], 'border': '1px solid', "padding-left": 5}),
 
             html.Iframe(
                 sandbox='allow-scripts',
@@ -288,7 +268,7 @@ html.Div(className="row", children=[
 
 heatmap_view_div = [html.Div(style={"backgroundColor": colors['white'], 'text-align': 'center', 'display': 'inline-block', 'margin-left':10, 'margin-right':0,"padding": 0}, children=[
 
-        html.H6("PM2.5 Concentration Heatmap", id = "heatmap_title", style={"backgroundColor": colors['box4green'], 'align': 'center', 'border': '1px solid', "padding-left": 5}),
+        html.H6("PM2.5 Concentration Heatmap", id = "heatmap_title", style={"backgroundColor": colors['box4purp'], 'align': 'center', 'border': '1px solid', "padding-left": 5}),
 
         dcc.Dropdown(
             id = 'heatmap_pollutant',
@@ -385,7 +365,7 @@ def update_plot1(pollutant1, location1, daterange):
 def update_plot2(location2, daterange):
 
     updated_plot2 = Plotter.pm_linechart(location =location2, pms = [2.5, 10], height = 220, width = 400, daterange=daterange).to_html()
-    updated_title2 = "Chart 2: Pollutant Concentration in " + str(location2)
+    updated_title2 = "Chart 3: Pollutant Concentration in " + str(location2)
 
     return updated_plot2, updated_title2
 
@@ -394,15 +374,16 @@ def update_plot2(location2, daterange):
 @app.callback(
     [dash.dependencies.Output('plot3', 'srcDoc'),
     dash.dependencies.Output('plot3_title', 'children')],
-    [dash.dependencies.Input('location3', 'value'),
-     dash.dependencies.Input('pollutant3', 'value'),
+    [dash.dependencies.Input('location1', 'value'),
+     dash.dependencies.Input('pollutant1', 'value'),
      dash.dependencies.Input('daterange', 'value')])
 
-def update_plot3(location3, pollutant3, daterange):
+def update_plot3(location1, pollutant1, daterange):
+    if type(location1) == str:
+        location1 = [location1]
+    updated_plot3 = Plotter.make_barchart(location1, pm = pollutant1, width = 350, height = 220, daterange=daterange).to_html()
 
-    updated_plot3 = Plotter.make_barchart(location3, pm = pollutant3, width = 350, height = 220, daterange=daterange).to_html()
-
-    updated_title3 = "Chart 3: Distribution of PM" + str(pollutant3) + " Concentration for BC Cities"
+    updated_title3 = "Chart 2: Distribution of PM" + str(pollutant1) + " Concentration for BC Cities"
 
     return updated_plot3, updated_title3
 

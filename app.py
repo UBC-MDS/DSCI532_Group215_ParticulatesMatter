@@ -50,9 +50,9 @@ colors = {"white": "#ffffff",
 app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     # HEADER
     html.Div(className="row", style={'backgroundColor': colors['black'], 'border': '1px solid', "padding-left": 5}, children=[
-        html.H3('Pollutants Matter BC – visualization of particulate matter concentrations (weighted monthly averages)',
+        html.H3('Pollutants Matter BC – Visualization of Particulate Matter Concentrations',
                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2}),
-        html.H6('Data is attributed to the BC Ministry of Environment and Climate Change Strategy',
+        html.P('This application tracks weighted monthly averages for pollution data collected from different stations across British Columbia. The measured pollutants, PM2.5 and PM10, refer to atmospheric particulate matter (PM) that have a diameter of less than 2.5 and 10 micrometers, respectively.',
                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2})
     ]),
     
@@ -285,7 +285,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                 value=[2000, 2017]
             )
             ]),
-        html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),
+        html.A("Source: BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),
         html.P("Data is limited to the stations where measurements were taken and therefore does not account for the entirety of BC")  
 
 

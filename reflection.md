@@ -39,6 +39,7 @@
 
 Our first priority item from issue #51 was to fix the bug in the date slider which didn't allow the full time series to be selected. Next, we simplified the controls menu since the Chart 1 time series and the Chart 3 distribution histograms can be made to present the same locations. With this change we also moved the histogram to be next to the time series in Chart 1. To assist with interpretting the time series charts, we added a description informing users that the grey lines represent provincial averages. With regards to the heatmap, we decided to filter the locations down to the top 10 most populous regions, add a description noting that the redlines mark the selected daterange and add a second tab which allows the users to see an enlarged version.
 
+On the organization and readability front, we've refactored the code to separate out the app layouts into a new `tabs.py`, much like the `utils.py` which stores all our plot functions. This change leads to tidier `app.py` file. 
 
 
 ## Wishlist features/bugfixes

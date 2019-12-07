@@ -122,13 +122,13 @@ def get_summary(df_combined):
 
 ### Main Processes
 
-# Read in data from server ftp://ftp.env.gov.bc.ca/pub/outgoing/AIR/AnnualSummary/2000-2016/pm10.csv
-PM10_data = pd.read_csv('personal/PM10.csv', 
+# Read in data
+PM10_data = pd.read_csv('ftp://ftp.env.gov.bc.ca/pub/outgoing/AIR/AnnualSummary/2000-2016/pm10.csv', 
                         index_col = 'DATE_PST', 
                         parse_dates = True)
 
-# ftp://ftp.env.gov.bc.ca/pub/outgoing/AIR/AnnualSummary/2000-2016/pm25.csv
-PM25_data = pd.read_csv('personal/PM25.csv', 
+
+PM25_data = pd.read_csv('ftp://ftp.env.gov.bc.ca/pub/outgoing/AIR/AnnualSummary/2000-2016/pm25.csv', 
                         index_col = 'DATE_PST', 
                         parse_dates = True)
 
@@ -138,7 +138,8 @@ for key,value in name_filter.items():
     PM25_data["STATION_NAME"] = PM25_data["STATION_NAME"].replace(key, value)
     
 # Find all the Station Locations that PM10 and PM25 datasets have in common
-shared_locations = set(PM10_data["STATION_NAME"].unique()).intersection(set(PM25_data["STATION_NAME"].unique()))
+shared_locations = ["Powell River", "Prince George", "Quesnel", "Williams Lake", "Houston", "Kitimat", "Golden", "Kelowna", "Smithers", "Vancouver"]
+#shared_locations = set(PM10_data["STATION_NAME"].unique()).intersection(set(PM25_data["STATION_NAME"].unique()))
 
 # Get avg pollutant concentrations for each location, as well as the overall trend (baseline)
 PM10_processed = process_dataset(PM10_data)
@@ -154,7 +155,7 @@ combined_data['index'] = pd.to_datetime(combined_data['index']).astype('str')
 combined_baseline_data['index'] = pd.to_datetime(combined_baseline_data['index']).astype('str')
 
 # Export the processed files
-combined_data.to_csv("data/processed_data.csv")
-combined_baseline_data.to_csv("data/processed_baseline_data.csv")
-get_summary(combined_data).to_csv("data/location_summary.csv")
+combined_data.to_csv("/data/processed_data.csv")
+combined_baseline_data.to_csv("/data/processed_baseline_data.csv")
+get_summary(combined_data).to_csv("/data/location_summary.csv")
 

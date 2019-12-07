@@ -74,7 +74,7 @@ html.Div(className="row", children=[
                     {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                 ],
                 multi = True,
-                value='Abbotsford'
+                value='Vancouver'
             )
 
             ]),
@@ -99,7 +99,7 @@ html.Div(className="row", children=[
                 options=[
                     {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                 ],
-                value=pm_df['STATION_NAME'].unique()[0],
+                value="Vancouver",
                 clearable = False
             )
 
@@ -139,7 +139,7 @@ html.Div(className="row", children=[
     html.Div(className='five columns', style={"backgroundColor": colors['white'], 'text-align': 'center', 'margin-left':10, 'margin-right':0, "padding": 0}, children=[
 
         html.Div(className="row",  children=[
-            html.H6("Chart 2: Pollutant Concentration in Abbotsford", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
+            html.H6("Chart 2: Pollutant Concentration in Vancouver", id = "plot2_title", style={"backgroundColor": colors['box2green'], 'border': '1px solid','padding-left':5}),
 
             html.Iframe(
                 sandbox='allow-scripts',
@@ -187,7 +187,7 @@ html.Div(className="row", children=[
                     {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                 ],
                 multi=True,
-                value = list(pm_df['STATION_NAME'].unique()[0:2])
+                value = ["Vancouver", "Kelowna"]
             )   ]),
 
         #BOX4 PURPLE
@@ -223,7 +223,7 @@ html.Div(className="row", children=[
                 style={'border-width': '0'},
 
                 ################ The magic happens here
-                srcDoc= Plotter.make_barchart(["Abbotsford"], pm = 2.5, width = None, height = 250, daterange=[2000,2017]).to_html()
+                srcDoc= Plotter.make_barchart(["Vancouver"], pm = 2.5, width = None, height = 250, daterange=[2000,2017]).to_html()
                 ################ The magic happens here
                 )
             ])
@@ -261,15 +261,15 @@ html.Div(className="row", children=[
 html.Div(className="row", children=[
 
     #BOX5 DATE CONTROLLER
-    html.Div(className="row",  style={'backgroundColor': colors['light_grey'], 'padding-bottom':30, 'padding-left':10,  'border': '1px solid'}, children=[
+    html.Div(className="row",  style={'backgroundColor': colors['light_grey'], 'padding-bottom':30, 'padding-left':20,'padding-right':20,  'border': '1px solid'}, children=[
         html.P("Date control slider", style={'padding-top':0}),
         dcc.RangeSlider(
             id = 'daterange',
-            marks={i: '{}'.format(i) for i in range(2000, 2017)},
+            marks={i: '{}'.format(i) for i in range(2000, 2018)},
             step = None,
             min=2000,
             max=2017,
-            value=[2000, 2016]
+            value=[2000, 2017]
         )
         ]),
     html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),
@@ -306,21 +306,29 @@ heatmap_view_div = [html.Div(style={"backgroundColor": colors['white'], 'text-al
                                         include_red_lines=False, include_y_labels = True).to_html()
             ################ The magic happens here
             ),
-            html.P("Hover over heatmap for location and date information")
+            html.P("Hover over heatmap for location and date information"),
+            html.A("BC Ministry of Environment and Climate Change Strategy", href = "https://catalogue.data.gov.bc.ca/dataset/77eeadf4-0c19-48bf-a47a-fa9eef01f409", target = "_blank"),
+            html.P("Data is limited to the stations where measurements were taken and therefore does not account for the entirety of BC")
 
 ])]
 
 # def chart1_wrapper(pollutant1,location1, daterange):
 #     return Plotter.location_linechart(pm = pollutant1, init_locations= location1,height = 220, width = 320,
 #                                                 start_date = str(daterange[0])+'-01-01', end_date= str(daterange[1])+'-01-01').to_html()
-
+# app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
+#     # HEADER
+#     html.Div(className="row", style={'backgroundColor': colors['black'], 'border': '1px solid', "padding-left": 5}, children=[
+#         html.H3('Pollutants Matter BC – Visualization of Particulate Matter Concentrations',
+#                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2}),
+#         html.P('This application tracks weighted monthly averages for pollution data collected from different stations across British Columbia. The measured pollutants, PM2.5 and PM10, refer to atmospheric particulate matter (PM) that have a diameter of less than 2.5 and 10 micrometers, respectively.',
+#                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2})
 # APP LAYOUT
 app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     # HEADER
     html.Div(className="row", style={'backgroundColor': colors['black'], 'border': '1px solid', "padding-left": 5}, children=[
-        html.H3('Pollutants Matter BC – visualization of particulate matter concentrations (weighted monthly averages)',
+        html.H3('Pollutants Matter BC – Visualization of Particulate Matter Concentrations',
                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2}),
-        html.H6('Data is attributed to the BC Ministry of Environment and Climate Change Strategy',
+        html.P('This application tracks weighted monthly averages for pollution data collected from different stations across British Columbia. The measured pollutants, PM2.5 and PM10, refer to atmospheric particulate matter (PM) that have a diameter of less than 2.5 and 10 micrometers, respectively.',
                 style={'color':colors['white'], 'margin-top':2, 'margin-bottom':2})
     ]),
 

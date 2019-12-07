@@ -324,7 +324,7 @@ class PlotsCreator:
 
     def make_heatmap(self, pm = 2.5, width = None, height = None,
                             daterange=[2000,2017], include_y_labels = False,
-                            title_text = ''):
+                            include_red_lines = True, title_text = ''):
         """
         Plots heatmap with all locations and given pm
 
@@ -384,7 +384,7 @@ class PlotsCreator:
                         height = height
                     )
 
-        if start_date is not None or end_date is not None:
+        if (start_date is not None or end_date is not None) and include_red_lines:
             start_date = pd.to_datetime(start_date)
             end_date = pd.to_datetime(end_date)
 

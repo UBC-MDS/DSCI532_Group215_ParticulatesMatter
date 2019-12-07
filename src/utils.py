@@ -383,7 +383,6 @@ class PlotsCreator:
                         width = width,
                         height = height
                     )
-
         if (start_date is not None or end_date is not None) and include_red_lines:
             start_date = pd.to_datetime(start_date)
             end_date = pd.to_datetime(end_date)
@@ -394,6 +393,12 @@ class PlotsCreator:
                 x =alt.X('val:O', title = 'filter', axis = None)
             )
 
-            return (base_chart + rule)
+            return (base_chart + rule).configure_axis(
+                        labelFontSize=20
+                    )
 
-        return base_chart
+
+        return base_chart.configure_axis(
+                        labelFontSize=20
+                    )
+

@@ -327,7 +327,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
     # TAB
     dcc.Tabs(id="tabss", value='general_tab', children=[
         dcc.Tab(label='Joint View', value='general_tab'),
-        dcc.Tab(label='Heatmap', value='heatmap_tab'),
+        dcc.Tab(label='Enlarged Heatmap', value='heatmap_tab'),
     ]),
 
     html.Div(id='tabs-content')

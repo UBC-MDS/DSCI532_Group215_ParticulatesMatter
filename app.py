@@ -87,7 +87,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
                     multi = True,
-                    value='Abbotsford'
+                    value='Vancouver'
                 )    
                 
                 ]),
@@ -112,7 +112,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     options=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
-                    value=pm_df['STATION_NAME'].unique()[0],
+                    value="Vancouver",
                     clearable = False
                 )
 
@@ -200,7 +200,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                         {'label':k , 'value': k } for k in pm_df['STATION_NAME'].unique()
                     ],
                     multi=True,
-                    value = list(pm_df['STATION_NAME'].unique()[0:2])
+                    value = ["Vancouver", "Kelowna"]
                 )   ]),
 
             #BOX4 PURPLE
@@ -236,7 +236,7 @@ app.layout = html.Div(style={'backgroundColor': colors['white']}, children=[
                     style={'border-width': '0'},
 
                     ################ The magic happens here
-                    srcDoc= Plotter.make_barchart(["Abbotsford"], pm = 2.5, width = None, height = 250, daterange=[2000,2017]).to_html()
+                    srcDoc= Plotter.make_barchart(["Vancouver"], pm = 2.5, width = None, height = 250, daterange=[2000,2017]).to_html()
                     ################ The magic happens here
                     )
                 ])
